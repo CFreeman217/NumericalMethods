@@ -63,10 +63,13 @@ def bisection(funct, lowerguess, upperguess, er_limit, max_iter):
         else:
             # A true zero has been found
             break
+        # Calculate the current Error for this iteration
         c_error = abs((x_guess - old_guess) / x_guess)
+    # Print the output
     print('\nFinding root by bisection method : ')
     print('Approximate Root after {} operations is : {}'.format(i_count, x_guess,))
     print('Estimated Error : {}'.format(c_error))
+    # Returns the coordinates of the most recent guess
     return x_guess, y_guess
 
 main()
