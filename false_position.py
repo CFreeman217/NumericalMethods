@@ -67,3 +67,5 @@ def false_position(funct, lowerguess, upperguess, max_iter):
     # Print output
     print('After {} iterations, the approximate root has been calculated...'.format(i_count))
     print('Approximate Value : {} \t Estimated Error : {}'.format(x_guess, c_error))
+
+main()
