@@ -1,3 +1,4 @@
+''' https://github.com/CFreeman217/NumericalMethods.git '''
 
 def main():
     '''
@@ -6,18 +7,20 @@ def main():
     Q = 20 # m^3/s - Flow Rate
     g = 9.81 # m/s^2 - Gravity
     # Function to iterate over
-    f = lambda x : 1 - (Q**2 / (g * (3*x + x**2/2)**3))*(3 + x)
+    f = lambda y : 1 - (Q**2 / (g * (3*y + y**2/2)**3))*(3 + y)
     low = 0.5 # Lower Guess
     high = 2.5 # Upper Guess
     er = 0.01 # Boundary Limit
     m_it = 10 # Maximum Iterations
     # Call the bisection subroutine
-    bisection(f,low,high,er,m_it)
+    bisection(f, low, high, er, m_it)
 
 
 def bisection(funct, lowerguess, upperguess, er_limit, max_iter):
     '''
-    Numerical Methods - Bisection Method:
+    Numerical Methods - Roots of Functions
+    
+    Bisection Method:
 
     Select two x-values that yield function outputs of opposite sign and
     this function performs bisection to find the root.
