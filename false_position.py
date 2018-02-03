@@ -4,12 +4,12 @@ def main():
     '''
     Problem 5-17 : Estimating volume of spherical tank
     '''
-    import math
+    from math import pi
     R = 3 # meters - Radius of tank
     V = 30 # m^3 - Volume to estimate
     m_it = 3 # Iteration limit
     # Volume of sphere minus estimation volume (find zero for this function)
-    f = lambda h : math.pi * h ** 2 * (3*R - h)/3 - V
+    f = lambda h : pi * h ** 2 * (3*R - h)/3 - V
     h_low = 0 # Lower guess
     h_high = R # Upper guess
 
