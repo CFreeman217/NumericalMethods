@@ -10,8 +10,6 @@ def root_approx(in_value, er_limit, max_iter):
     er_limit : The estimated error threshold
     max_iter : The maximum number of iterations through the for loop
     '''
-    # Original number is the value we want to estimate the square root of
-    o_num = in_value
     # Initialize iteration counter
     i_count = 0
     # Current error is set at 100%
@@ -24,7 +22,7 @@ def root_approx(in_value, er_limit, max_iter):
         # Store the previous value
         old_guess = x_guess
         # Generate a new guess for an x-value
-        x_guess = (x_guess + o_num/x_guess)/2
+        x_guess = (x_guess + in_value/x_guess)/2
         # Cycle the iterator
         i_count += 1
         # Only update approximate error if estimate is not zero
