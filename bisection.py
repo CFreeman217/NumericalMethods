@@ -16,7 +16,7 @@ def main():
     bisection(f, low, high, er, m_it)
 
 
-def bisection(funct, lowerguess, upperguess, er_limit, max_iter):
+def bisection(funct, lowerguess, upperguess, er_limit=0, max_iter=10):
     '''
     Numerical Methods - Roots of Functions
     
@@ -36,17 +36,12 @@ def bisection(funct, lowerguess, upperguess, er_limit, max_iter):
     y_lower = funct(lowerguess)
     x_upper = upperguess
     y_upper = funct(upperguess)
-    # Current error is set at 100%
-    c_error = 1.0
-    # Initialize current guess
-    x_guess = 0
-    # Initialize iteration counter
-    i_count = 0
+    # Initialize an x guess
+    x_guess = x_lower
     # While current error is outside the desired estimate and we are
     # within the iteration limit
-    while c_error > er_limit and i_count < max_iter:
-        # Cycle the iterator
-        i_count += 1
+    for iter_no in range(max_iter):
+    # while c_error > er_limit and i_count < max_iter:
         # Store the previous value
         old_guess = x_guess
         # Generate a new guess for an x-value
@@ -68,10 +63,14 @@ def bisection(funct, lowerguess, upperguess, er_limit, max_iter):
             break
         # Calculate the current Error for this iteration
         c_error = abs((x_guess - old_guess) / x_guess)
+        if c_error < er_limit:
+            break
     # Print the output
-    print('\nFinding root by bisection method : ')
-    print('Approximate Root after {} operations is : {}'.format(i_count, x_guess,))
+    print('Bisection Method Results : \n')
+    print('Approximated Value : {}'.format(x_guess))
+    print('Function Output : {}'.format(y_guess))
     print('Estimated Error : {}'.format(c_error))
+    print('Iteration Count : {}'.format(iter_no + 1))
     # Returns the coordinates of the most recent guess
     return x_guess, y_guess
 

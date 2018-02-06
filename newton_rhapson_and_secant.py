@@ -1,77 +1,95 @@
 def main():
     '''
-    Numerical Methods - Roots of functions
-
-    Newton-Raphson and Secant Methods
-
-    These open methods do not require both of the initial guesses to straddle
-    the root, but sometimes these methods do not converge.
-    Newton-Raphson is one of the more widely used algorithms.
-
     Associated with Problem 6.9 b & c
     '''
 
     # Initial functions to find the root
     funct = lambda x : x**3 - 6*x**2 + 11*x - 6.1
-    # Derivative of the first function
+    # Derivative of the first function for Newton-Rhapson
     funct_p = lambda x : 3*x**2 - 12*x + 11
-
-    # Newton - Raphson Method
     x_init = 3.5 # Initial guess
-    y_init = funct(x_init) # Initial output
+    x_i = 2.5 # Initial first guess for the i term in secant method
     er_lim = 0.005 # Error limit of less than 0.5%
-    c_error = 1 # Current guess error
-    # Initialize iteration counter
-    i_count = 0
-    # Initialize the root guess
-    x_guess = x_init
-    y_guess = y_init
-    # Find derivative output value
-    y_slope = funct_p(x_guess)
-    # While we are outside the error threshold and under our iteration count
-    while c_error > er_lim and i_count < 3:
-        # Cycle the iterator
-        i_count += 1
-        # Store prevous iteration information
-        old_guess_x = x_guess
-        old_guess_y = y_guess
-        old_slope_y = y_slope
-        # Guess a new root location and store the new outputs
-        x_guess = old_guess_x - old_guess_y / old_slope_y
-        y_guess = funct(x_guess)
-        y_slope = funct_p(x_guess)
-        # Calculate estimated error
-        c_error = abs((x_guess - old_guess_x) / x_guess)
-    print('From Newton-Raphson Method :')
-    print('Approximate Root after {} operations is : {}'.format(i_count, x_guess))
-    print('Estimated Error : {}'.format(c_error))
+    max_i = 3 # Max iterations
+    newton_raphson(funct, funct_p, x_init, er_lim, max_i)
+    nm_secant(funct, x_init, x_i, er_lim, max_i)
+
+
+def newton_raphson(funct, fderiv, initial_guess, er_limit=0, max_iter=10):
+    '''
+    Numerical Methods - Roots of functions
+
+    Newton-Raphson Method
+
+    These open methods do not require both of the initial guesses to straddle
+    the root, but sometimes these methods do not converge.
+    Newton-Raphson is one of the more widely used algorithms.
+
+    funct : The function you are finding the root for
+    fderiv : The first derivative of funct
+    initial_guess : Starting point for calculation
+    er_limit : Estimated Error Threshold (Optional)
+    max_iter : Maximum iterations (Optonal, default is 10)
     
-    # Secant Method
-    x_init_1 = 3.5 # Initial first guess for the i+1 term
-    y_init_1 = funct(x_init_1) # Initial output for the i+1 term
-    x_init = 2.5 # Initial first guess for the i term
-    y_init = funct(x_init) # Initial output for the i term
-    er_lim = 0.005 # Error limit of less than 0.5%
-    c_error = 1 # Current guess error
-    # Initialize iteration counter
-    i_count = 0
-    # While we are outside the error threshold and under our iteration count
-    while c_error > er_lim and i_count < 3:
-        # Cycle the iterator
-        i_count += 1
-        # Update previous values
-        x_i_2 = x_init_1 # The i+2 term for the x-guess
-        y_i_2 = y_init_1 # Corresponding output
-        x_init_1 = x_init # Sequence variables up the chain
-        y_init_1 = y_init # Same for output
-        # Secant method
-        x_init = x_init_1 - (y_init_1 * (x_i_2 - x_init_1))/(y_i_2 - y_init_1)
-        # Store the new function output
-        y_init = funct(x_init)
-        # Calculate the current Error for this iteration
-        c_error = abs((x_init - x_init_1) / x_init)
-    print('\nFrom Secant Method :')
-    print('Approximate Root after {} operations is : {}'.format(i_count, x_init))
+    '''
+    x_guess = initial_guess
+    for iter_no in range(max_iter):
+        old_guess = x_guess
+        y_guess = funct(x_guess)
+        dy_guess = fderiv(x_guess)
+        x_guess = x_guess - y_guess / dy_guess
+        # Calculate the current estimated error on this iteration
+        c_error = abs((x_guess - old_guess) / x_guess)
+        if c_error < er_limit:
+            # The calculated error has dropped below the required threshold
+            break
+    print('\nNewton-Raphson Method Results : \n')
+    print('Approximated Value : {}'.format(x_guess))
+    print('Function Output : {}'.format(y_guess))
     print('Estimated Error : {}'.format(c_error))
-        
+    print('Iteration Count : {}'.format(iter_no + 1))
+
+def nm_secant(funct, xi_1 , xi, er_limit=0, max_iter=100):
+    '''
+    Numerical Methods - Roots of functions
+
+    Secant Method
+
+    These open methods do not require both of the initial guesses to straddle
+    the root, but sometimes these methods do not converge.
+    
+
+    funct : The function you are finding the root for
+    xi_1 : The i+1 term of the x starting values
+    xi : The i-th term of starting values
+    er_limit : Estimated Error Threshold (Optional)
+    max_iter : Maximum iterations (Optional, default is 10)
+    
+    '''
+    # Gather information on the function at the starting points
+    x_plus1 = xi_1
+    y_plus1 = funct(x_plus1)
+    x_guess = xi
+    y_guess = funct(x_guess)
+    # Iterate within the loop parameters
+    for iter_no in range(max_iter):
+        # Store the previous values
+        x_plus2 = x_plus1
+        y_plus2 = y_plus1
+        x_plus1 = x_guess
+        y_plus1 = y_guess
+        # Generate a new guess and output
+        x_guess = x_plus1 - (y_plus1 * (x_plus2 - x_plus1))/(y_plus2 - y_plus1)
+        y_guess = funct(x_guess)
+        # Calculate the current estimated error on this iteration
+        c_error = abs((x_guess - x_plus1) / x_guess)
+        if c_error < er_limit:
+            # The calculated error has dropped below the required threshold
+            break
+    print('\nSecant Method Results : \n')
+    print('Approximated Value : {}'.format(x_guess))
+    print('Function Output : {}'.format(y_guess))
+    print('Estimated Error : {}'.format(c_error))
+    print('Iteration Count : {}'.format(iter_no + 1))
+
 main()
