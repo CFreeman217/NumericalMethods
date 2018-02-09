@@ -13,9 +13,9 @@ def main():
     h_low = 0 # Lower guess
     h_high = R # Upper guess
 
-    false_position(f, h_low, h_high, m_it)
+    false_position(f, h_low, h_high, 0, m_it)
 
-def false_position(funct, lowerguess, upperguess, max_iter):
+def false_position(funct, lowerguess, upperguess, er_limit=0, max_iter=10):
     '''
     Numerical Methods - Roots of functions
     
@@ -38,11 +38,8 @@ def false_position(funct, lowerguess, upperguess, max_iter):
     # Initialize a guess
     x_guess = 0
     # Initialize iteration counter
-    i_count = 0
-    # While within the iteration count
-    while i_count < max_iter:
-        # Cycle the iterator
-        i_count += 1
+    for iter_no in range(max_iter):
+
         # Store the previous value
         old_guess = x_guess
         # Generate a new guess for the root
@@ -64,8 +61,15 @@ def false_position(funct, lowerguess, upperguess, max_iter):
             break
         # Calculate the current estimated error on this iteration
         c_error = abs((x_guess - old_guess) / x_guess)
+        if c_error < er_limit:
+            # The calculated error has dropped below the required threshold
+            break
     # Print output
-    print('After {} iterations, the approximate root has been calculated...'.format(i_count))
-    print('Approximate Value : {} \t Estimated Error : {}'.format(x_guess, c_error))
-
+    print('False Position Method Results : \n')
+    print('Approximated Value : {}'.format(x_guess))
+    print('Function Output : {}'.format(y_guess))
+    print('Estimated Error : {}'.format(c_error))
+    print('Iteration Count : {}'.format(iter_no + 1))
+    # Returns the coordinates of the most recent guess
+    return x_guess, y_guess
 main()
