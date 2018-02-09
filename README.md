@@ -10,3 +10,4 @@ Finding Roots of Functions:
  - False Position
  - Newton Rhapson
  - Secant
+ - Muller Method
