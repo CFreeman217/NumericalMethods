@@ -43,6 +43,8 @@ def muller_method(funct, guess1, guess2, guess3, er_limit=0.00001, max_iter=10):
     er_limit : Estimated error threshold (optional, default is 0.0001)
     max_iter : Maximum number of iterations (optional, default is 10)
     '''
+    # The python equivalent for fzero in matlab. not standard
+    from scipy.optimize import fsolve
     # The complex math library can handle negative square roots. Assign this
     # functionality for the usage : csqrt(-1) = 1j
     from cmath import sqrt as csqrt
@@ -93,6 +95,7 @@ def muller_method(funct, guess1, guess2, guess3, er_limit=0.00001, max_iter=10):
     print('Function Output : {}'.format(y_guess3))
     print('Estimated Error : {}'.format(c_error))
     print('Iteration Count : {}'.format(iter_no + 1))
+    print('SciPy fsolve output : {}'.format(fsolve(funct, x_guess1)))
 
 example7_2()
 prob7_3a() 
