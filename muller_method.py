@@ -36,6 +36,12 @@ def muller_method(funct, guess1, guess2, guess3, er_limit=0.00001, max_iter=10):
     '''
     Numerical Methods - Muller Method
 
+    This method takes three guesses around a local root and draws a parabola through
+    the three points. Then, using the quadratic formula, roots are found. This method
+    can be used to find complex roots. This method is slightly slower than the
+    Newton-Raphson method. The three function outputs cannot be colinear or else a
+    parabola cannot be fit to the points. 
+
     funct : The function we are trying to find the root for
     guess1 : First guess for initializing a lower bound on drawing a parabola
     guess2 : Second guess should be between guesses 1 and 3
