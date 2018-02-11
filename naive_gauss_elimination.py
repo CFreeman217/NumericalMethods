@@ -68,7 +68,7 @@ def naive_gauss(coef_matrix, known_array):
         # Divide all of this by the coefficient of the unknown variable to find the value for the unknown.
         # Do some fancy maneuvering to append this to the top of the output list, building the solution
         # from the bottom up.
-        output_list = [(known_array[calc_row] - total) / coef_matrix[calc_row][calc_row] + output_list
+        output_list = [(known_array[calc_row] - total) / coef_matrix[calc_row][calc_row]] + output_list
     print(output_list)
     return(output_list)
 example()
