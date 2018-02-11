@@ -25,7 +25,7 @@ def naive_gauss(coef_matrix, known_array):
     known_array : Array of constants
     '''
     # FORWARD ELIMINATION - 
-    # The goal here is to get an upper triangular
+
     # Get the size of the array
     array_size = len(coef_matrix)
     # Output list to hold solution values
