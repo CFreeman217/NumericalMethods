@@ -60,16 +60,16 @@ def naive_gauss(coef_matrix, known_array):
         # Initiate a value to hold the sum of the known variables and coefficients
         total = 0
         # Iterations of 'found_value' begin at -1 and stop when equal to the row we are calculating
-        for found_value in range(-1,row,-1):
+        for found_value in range(-1,calc_row,-1):
             # For each value that has been found so far, multiply the coefficient matrix
             # values for this row by the found values
-            total += output_list[known_index]*coef_matrix[row][known_index]
+            total += output_list[found_value ]*coef_matrix[calc_row][found_value]
         # Subtract the sum of the known quantities from the given input array for the row we are calculating
         # Divide all of this by the coefficient of the unknown variable to find the value for the unknown.
         # Do some fancy maneuvering to append this to the top of the output list, building the solution
         # from the bottom up.
         output_list = [(known_array[calc_row] - total) / coef_matrix[calc_row][calc_row]] + output_list
-    print(output_list)
+    print('{}'.format(output_list))
     return(output_list)
 example()
 example2()
