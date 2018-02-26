@@ -72,7 +72,7 @@ def mat_inverse(input_matrix):
     if m_rows != n_cols:
         print('Input matrix must be square')
         exit
-    # Generate an identity matrix for the square matrix
+    # Generate an identity matrix for the input matrix
     vec_B = [[float(i==j) for i in range(m_rows)] for j in range(m_rows)]
     # Decompose the input matrix into lower and upper triangular matrices
     lowr, upr = lu_decomp(input_matrix)
@@ -123,11 +123,10 @@ def mat_pivot(in_matrix):
 def lu_decomp(input_matrix, pivot=True):
     '''
     Yields the lower and upper decomposition for the input matrix (must be square)
+    (optional) Cancel the pivoting step, default is to pivot.
     Returns :
-
     lower : Lower triangular matrix
     upper : Upper triangular matrix
-
     This method is slower than the numpy version but this is a breakdown of how it is done.
     '''
     n_size = len(input_matrix)
@@ -162,7 +161,6 @@ def lu_decomp(input_matrix, pivot=True):
             # Assign the lower matrix list item i for the computation row
             sum_low = sum(upper[k][comp_row]* lower[i][k] for k in range(comp_row))
             lower[i][comp_row] = (new_mat[i][comp_row] - sum_low) / upper[comp_row][comp_row]
-
     return lower, upper
 
 def back_sub(input_matrix, known_values):
@@ -225,6 +223,6 @@ def forward_sub(input_matrix, known_values):
         results += [(known_values[calc_row] - total) / input_matrix[calc_row][calc_row]]
     return results
 
-# prob10_9()
+prob10_9()
 # example10_3()
 prob10_11()
