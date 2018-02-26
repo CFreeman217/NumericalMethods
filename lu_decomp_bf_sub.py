@@ -23,7 +23,7 @@ def prob10_9():
 
 def mat_mult(mat_m, mat_n):
     '''
-    Multiplies two matrices m and n_size
+    Multiplies two matrices m and n
     '''
     # Generate a matrix of zeros to hold the output
     result = [[0] * len(mat_m) for z_col in range(len(mat_n[0]))]
