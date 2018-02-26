@@ -12,7 +12,7 @@ def example():
 
 def naive_gauss_pivot(input_coeff_mat,known_array):
     '''
-    Numerical Methods : Naive Gauss Elimination
+    Numerical Methods : Gauss Elimination
 
     Solves a system of equations using matrix of coefficients and array of
     known_index values. This is a two step process:

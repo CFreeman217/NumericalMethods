@@ -1,4 +1,7 @@
 def prob10_9():
+    '''
+    Solve the system of equations using LU Decomposition and back substitution
+    '''
     mat_A = [[ 3, -2, 1],
              [ 2,  6,-4],
              [-1, -2, 5]]
@@ -20,6 +23,67 @@ def prob10_9():
     print('Solution : ')
     for line in sol:
         print(line)
+
+def example10_3():
+    '''
+    Compute the matrix inverse of the following matrix
+    '''
+    mat_A = [[3.0, -0.1, -0.2],
+             [0.1,  7.0, -0.3],
+             [0.3, -0.2, 10.0]]
+    for line in zip(*mat_inverse(mat_A)):
+        # FANCY FORMAT: {0:1.4E}
+        #               0 is the index of the formatter tag
+        #               : Separates the index number from the formatter
+        #               1 Minimum digits to display before the decimal (space before to pad positives)
+        #               . Decimal divider location
+        #               4 Number of decimals to display
+        #               E Use a capital E for scientific notation (f - float, e - lowercase e)
+        print(['{0: 1.4E} '.format(k) for k in line])
+
+def prob10_11():
+    '''
+    Use the following decomposition to (a) compute the determinant and (b) solve using vec_B
+    (a) Determinant of A is product of diagonal down U matrix,
+        det_A = (3) * (7.3333) * (3.6364) = 80.0004363
+    (b) See below:
+    '''
+    L = [[ 1.0000, 0.0000, 0],
+         [ 0.6667, 1.0000, 0],
+         [-0.3333,-0.3636, 1]]
+    U = [[ 3,-2.0000, 1.0000],
+         [ 0, 7.3333,-4.6667],
+         [ 0, 0.0000, 3.6364]]
+    vec_B = [-10,
+              44,
+             -26]
+    res_D = forward_sub(L, vec_B)
+    sol = back_sub(U, res_D)
+    for line in sol:
+        print('{0: 1.2f} '.format(line))
+
+def mat_inverse(input_matrix):
+    '''
+    Computes the inverse of a given matrix through LU Decomposition, forward, and back substitution
+    '''
+    # Get the size of the matrix and make sure it is square
+    m_rows = len(input_matrix)
+    n_cols = len(input_matrix[0])
+    if m_rows != n_cols:
+        print('Input matrix must be square')
+        exit
+    # Generate an identity matrix for the square matrix
+    vec_B = [[float(i==j) for i in range(m_rows)] for j in range(m_rows)]
+    # Decompose the input matrix into lower and upper triangular matrices
+    lowr, upr = lu_decomp(input_matrix)
+    # Instantiate a list for the output solutions
+    solution = []
+    # Run the LU Decomposition / back and forward substitution for each row in the identity matrix
+    for row in vec_B:
+        res_D = forward_sub(lowr, row)
+        # Append each new value to the end of the solution list
+        solution.append(back_sub(upr,res_D))
+    return solution
 
 def mat_mult(mat_m, mat_n):
     '''
@@ -44,11 +108,9 @@ def mat_pivot(in_matrix):
     transformed matrix
     '''
     n_row = len(in_matrix)
-
     # Generates an identity matrix using the result of the boolean test that runs down the
     # column and row for the matrix size.
     identity_mat = [[float(i==j) for i in range(n_row)] for j in range(n_row)]
-
     for item in range(n_row):
         # Rearrange the identity matrix so that the largest absolute value for each element
         # is on the diagonal
@@ -56,10 +118,9 @@ def mat_pivot(in_matrix):
         if item != row:
             # Swap the rows
             identity_mat[item], identity_mat[row] = identity_mat[row], identity_mat[item]
-
     return identity_mat
 
-def lu_decomp(input_matrix):
+def lu_decomp(input_matrix, pivot=True):
     '''
     Yields the lower and upper decomposition for the input matrix (must be square)
     Returns :
@@ -78,8 +139,11 @@ def lu_decomp(input_matrix):
     lower = [[0] * n_size for i in range(n_size)]
     upper = [[0] * n_size for i in range(n_size)]
     # Create pivot matrix pivot and multiplied matrix new_mat
-    pivot = mat_pivot(input_matrix)
-    new_mat = mat_mult(pivot,input_matrix)
+    if pivot == True:
+        pivot = mat_pivot(input_matrix)
+        new_mat = mat_mult(pivot,input_matrix)
+    else:
+        new_mat = input_matrix
     # Perform LU Decomposition on each computation row
     # Here, each computation row will be calculated by iterating through each row of the matrix from top to bottom
     for comp_row in range(n_size):
@@ -161,4 +225,6 @@ def forward_sub(input_matrix, known_values):
         results += [(known_values[calc_row] - total) / input_matrix[calc_row][calc_row]]
     return results
 
-prob10_9()
+# prob10_9()
+# example10_3()
+prob10_11()
