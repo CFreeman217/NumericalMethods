@@ -11,3 +11,11 @@ Finding Roots of Functions:
  - Secant
  - Muller Method
 
+Solving Systems of Equations:
+ - Naive Gauss Elimination (with pivoting)
+ - LU Decomposition
+
+Snippets:
+ - Doolittle matrix pivoting
+ - Matrix multiplication
+ - Back and forward substitution
