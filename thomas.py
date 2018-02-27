@@ -13,6 +13,23 @@ def example11_1():
     ans = thomas(in_f, in_e, in_g, in_b)
     print(ans)
 
+def prob11_3():
+    '''
+    The following tridiagonal system must be solved as part of a larger algorithm
+    (Crank-Nicholson) for solving partial differential equations. Use the Thomas
+    algorithm to obtain a solution
+    '''
+    # The primary diagonal
+    in_f = [2.01475] * 4
+    # Bottom coefficients
+    in_e = [-0.020875] * 3
+    # Top coefficients
+    in_g = in_e
+    # known vector
+    in_b = [4.175, 0, 0, 2.0875]
+    ans = thomas(in_f, in_e, in_g, in_b)
+    print(ans)
+
 def thomas(f_diag, e_diag, g_diag, b_vec):
     '''
     Numerical Methods : Thomas Algorithm
@@ -54,4 +71,5 @@ def thomas(f_diag, e_diag, g_diag, b_vec):
         sol_vec[k] = (b_vec[k] - g_diag[k] * sol_vec[k+1]) / f_diag[k]
     return sol_vec
 
-example11_1()
+# example11_1()
+prob11_3()
