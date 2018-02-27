@@ -12,8 +12,10 @@ Finding Roots of Functions:
  - Muller Method
 
 Solving Systems of Equations:
- - Naive Gauss Elimination (with pivoting)
+ - Gauss Elimination (with pivoting)
  - LU Decomposition
+ - Thomas algorithm for tridiagonal systems
+ - Gauss Seidel (with relaxation)
 
 Snippets:
  - Doolittle matrix pivoting
