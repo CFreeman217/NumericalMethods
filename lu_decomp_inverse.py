@@ -129,6 +129,7 @@ def lu_decomp(input_matrix, pivot=True):
     upper : Upper triangular matrix
     This method is slower than the numpy version but this is a breakdown of how it is done.
     '''
+    # Get the size of the coefficient matrix and make sure it is square
     n_size = len(input_matrix)
     n_cols = len(input_matrix[0])
     if n_size != n_cols:
