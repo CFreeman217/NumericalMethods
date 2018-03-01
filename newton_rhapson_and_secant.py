@@ -25,6 +25,9 @@ def newton_raphson(funct, fderiv, initial_guess, er_limit=0, max_iter=10):
     the root, but sometimes these methods do not converge.
     Newton-Raphson is one of the more widely used algorithms.
 
+    These methods converge at least twice as fast as bracketing methods
+    
+
     funct : The function you are finding the root for
     fderiv : The first derivative of funct
     initial_guess : Starting point for calculation

@@ -25,6 +25,7 @@ def gauss_seidel(coef_A,vec_B,guess_x=None, i_max=100, er_lim=.0001, rel_lam=1):
     Numerical Methods - Gauss-Seidel Method
 
     Most commonly used iterative method
+    Fast convergence (when this works) helps to control round-off error
     Relaxation uses a value to attenuate the movement - speeds up convergence
 
     Problems:

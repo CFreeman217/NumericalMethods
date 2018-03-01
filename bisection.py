@@ -21,7 +21,11 @@ def bisection(funct, lowerguess, upperguess, er_limit=0, max_iter=10):
     Numerical Methods - Roots of Functions
     
     Bisection Method:
-
+    
+    + As a bracketing method, this will always converge
+    - Requires 2 initial conditions that bracket the root
+    - Can be slow to converge
+    - Does not find multiple or complex roots.
     Select two x-values that yield function outputs of opposite sign and
     this function performs bisection to find the root.
 
