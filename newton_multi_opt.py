@@ -38,13 +38,31 @@ def newton_optimize(funct, fderiv, f2deriv, initial_guess, er_limit=0, max_iter=
     print('Iteration Count : {}'.format(iter_no + 1))
 
 def takehome_quiz():
-    
+    '''
+    A corporation  manufactures candles at two locations. The cost of producing
+    x units at location 1 is:
+    c1 = 0.02x^2 + 4x + 500
+    The cost of producing y units at location 2 is:
+    c2 = 0.05y^2 + 4y + 275
+    The candles sell for $15 per unit. Find the quantity that should be produced
+    at each location to maximize profit
+    '''
+    # Revenue is 15 dollars for each candle produced, in this case 15 * the sum of all candles
     revenue = lambda x, y : 15*(x + y)
+    # Cost of producing a candle at facility 1
     cost1 = lambda x : 0.02*x**2 + 4*x + 500
+    # Cost of producing a candle at facility 2
     cost2 = lambda y : 0.05*y**2 + 4*y + 275
-    total_cost = lambda x, y : cost1(x) + cost2(y)
-    profit = lambda x, y : revenue(x, y) - total_cost(x, y)
+    # Profit is equal to revenue minus total cost
+    profit = lambda x, y : revenue(x, y) - (cost1(x) + cost2(y))
+    # Simplify: 
+    # P = - 0.02x^2 + 11x - 0.05 y^2 + 11y - 775
+    # Take partial derivatives with respect to x and y
+    # dP/dx = -0.04x + 11
+    # dP/dy = -0.1y + 11
+    # Set equal to zero and solve for x and y
     dPdx = 275
     dPdy = 110
-    print(profit(dPdx, dPdy))
+    max_money = profit(dPdx, dPdy)
+    
 takehome_quiz()
