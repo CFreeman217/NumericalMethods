@@ -9,7 +9,7 @@ def newton_optimize(funct, fderiv, f2deriv, initial_guess, er_limit=0, max_iter=
     Newton-Raphson is one of the more widely used algorithms.
 
     These methods converge at least twice as fast as bracketing methods
-    
+
 
     funct : The function you are finding the root for
     fderiv : The first derivative of funct
@@ -17,7 +17,7 @@ def newton_optimize(funct, fderiv, f2deriv, initial_guess, er_limit=0, max_iter=
     initial_guess : Starting point for calculation
     er_limit : Estimated Error Threshold (Optional)
     max_iter : Maximum iterations (Optonal, default is 10)
-    
+
     '''
     x_guess = initial_guess
     for iter_no in range(max_iter):
@@ -55,7 +55,7 @@ def takehome_quiz():
     cost2 = lambda y : 0.05*y**2 + 4*y + 275
     # Profit is equal to revenue minus total cost
     profit = lambda x, y : revenue(x, y) - (cost1(x) + cost2(y))
-    # Simplify: 
+    # Simplify:
     # P = - 0.02x^2 + 11x - 0.05 y^2 + 11y - 775
     # Take partial derivatives with respect to x and y
     # dP/dx = -0.04x + 11
@@ -64,5 +64,5 @@ def takehome_quiz():
     dPdx = 275
     dPdy = 110
     max_money = profit(dPdx, dPdy)
-    
+    print(max_money)
 takehome_quiz()
