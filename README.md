@@ -13,9 +13,15 @@ Finding Roots of Functions:
 
 Solving Systems of Equations:
  - Gauss Elimination (with pivoting)
- - LU Decomposition
+ - LU Decomposition (matrix inversion)
  - Thomas algorithm for tridiagonal systems
  - Gauss Seidel (with relaxation)
+
+Curve fitting
+ - Linear Regression
+
+Numeric Integration:
+ - Simpsons rules (Closed) (Multiple Application, odd and even points)
 
 Snippets:
  - Doolittle matrix pivoting
