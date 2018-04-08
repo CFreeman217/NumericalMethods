@@ -17,10 +17,13 @@ Solving Systems of Equations:
  - Thomas algorithm for tridiagonal systems
  - Gauss Seidel (with relaxation)
 
-Curve fitting
+Curve fitting:
  - Linear Regression
 
-Numeric Integration:
+Differentiation:
+ - Centered Finite Divided Difference
+
+Integration:
  - Simpsons rules (Closed) (Multiple Application, odd and even points)
 
 Snippets:
