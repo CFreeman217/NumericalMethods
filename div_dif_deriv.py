@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+
 
 def cfdd_1deriv(fcn, val, step):
     '''
@@ -36,30 +36,35 @@ def num_1deriv(x_list, y_list):
     '''
     st_sz = abs(x_list[0] - x_list[1])
     n_size = len(y_list)
+    # Check for dimension mismatch and data length
     if n_size != len(x_list):
         print('Numerical Differentiation Error (num_1deriv)\nSize of x-list and y-list must be the same\n')
         exit()
+    # It needs at least 2 points to work
     elif n_size < 2:
         print('Numerical Differentiation Error (num_1deriv)\nData must be at least 2 values long.\n')
+    # Preallocating the output list saves time in most languages, but doesn't really matter in python
     out_list = [None] * n_size
+    # Runs through each case for the data points and returns the numerically derived derivative at the
+    # given point for the whole list of data.
     for i_x in range(n_size):
         if i_x == 0:
+            # First data point uses Forward Finite Divided Difference
             p_2 = y_list[i_x+2]
             p_1 = y_list[i_x+1]
             f_deriv = (-p_2 + 4*p_1 -3*y_list[i_x]) / (2*st_sz)
-        elif i_x == 1:
-            p_1 = y_list[i_x + 1]
-            m_1 = y_list[i_x - 1]
-            f_deriv = p_1 - m_1 / (2 * st_sz)
-        elif i_x == (n_size - 2):
+        elif i_x == 1 or i_x == n_size-2:
+            # The end points do not have as much data so the derivative loses accuracy, fewer series terms available
             p_1 = y_list[i_x + 1]
             m_1 = y_list[i_x - 1]
             f_deriv = p_1 - m_1 / (2 * st_sz)
         elif i_x == (n_size - 1):
+            # Last data point uses Backward Finite Divided Difference
             m_1 = y_list[i_x-1]
             m_2 = y_list[i_x-2]
             f_deriv = (3*y_list[i_x] - 4*m_1 + m_2) / (2*st_sz)
         else:
+            # Centered method while the data exists
             p_2 = y_list[i_x+2]
             p_1 = y_list[i_x+1]
             m_1 = y_list[i_x-1]
@@ -95,41 +100,31 @@ def num_2deriv(x_list, y_list):
             p_2 = y_list[i_x+2]
             p_1 = y_list[i_x+1]
             f_deriv = (-p_3 + 4*p_2 - 5*p_1 + 2*y_list[i_x])/(st_sz**2)
-        if i_x == 1 or i_x == n_size-2:
+        elif i_x == 1 or i_x == n_size-2:
             # The end points do not have as much data so the derivative loses accuracy, fewer series terms available
             p_1 = y_list[i_x+1]
             m_1 = y_list[i_x-1]
             f_deriv = (p_1 - 2*y_list[i_x] + m_1)/(st_sz**2)
-
-        elif i_x > 2 and i_x < n_size-2:
-            # Centered method while the data exists
-            p_2 = y_list[i_x+2]
-            p_1 = y_list[i_x+1]
-            m_1 = y_list[i_x-1]
-            m_2 = y_list[i_x-2]
-            f_deriv = (-p_2 + 16*p_1 - 30*y_list[i_x] + 16*m_1 - m_2)/(12*st_sz**2)
-
         elif i_x == n_size -1:
             # Last data point uses Backward Finite Divided Difference
             m_3 = y_list[i_x-3]
             m_2 = y_list[i_x-2]
             m_1 = y_list[i_x-1]
             f_deriv = (2*y_list[i_x] - 5*m_1 + 4*m_2 - m_3)/(st_sz**2)
+        else:
+            # Centered method while the data exists
+            p_2 = y_list[i_x+2]
+            p_1 = y_list[i_x+1]
+            m_1 = y_list[i_x-1]
+            m_2 = y_list[i_x-2]
+            f_deriv = (-p_2 + 16*p_1 - 30*y_list[i_x] + 16*m_1 - m_2)/(12*st_sz**2)
         # Saves each point in its appropriate spot in the output list
         out_list[i_x] = f_deriv
     return out_list
 
 
 
-def test_num():
 
-    x_data = np.linspace(0, 1, 100)
-    y_data = lambda x : x**2
-    d_data = num_1deriv(x_data, y_data(x_data))
-    plt.plot(x_data, y_data(x_data), label='Function')
-    plt.plot(x_data, d_data, label='Derivative')
-    plt.legend()
-    plt.show()
 def ex4_4():
     '''
     Test case for cfdd_1deriv
@@ -141,5 +136,5 @@ def ex4_4():
     y_list = [func(i) for i in x_list]
     print(cfdd_1deriv(func, val, hgt))
     print(num_1deriv(x_list, y_list))
-# test_num()
+
 ex4_4()
