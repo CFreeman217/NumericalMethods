@@ -28,71 +28,6 @@ def cfdd_1deriv(fcn, val, step):
     # Run through Taylor series approximation
     return ((-fx_p2 + 8*fx_p1 - 8*fx_m1 + fx_m2)/(12*step))
 
-# def num_1deriv(x_list, y_list, val):
-#     '''
-#     Numerical Methods - Numeric Differentiation of a list of data points
-#     returns first derivative
-#     Forward Finite Divided difference at the start, Backward at the end, and centered in the middle
-#     '''
-#     x_index = []
-#     x_val = 0
-#     y_val = 0
-#     for key, x_num in enumerate(x_list):
-#         if val > x_num:
-#             # Linear Interpolation of value from points
-#             x_index.append(key)
-#             x_val = val
-#             y_val = y_list[key-1] + val * ((y_list[key] - y_list[key-1]) / (x_num - x_list[key-1]))
-#             break
-#         elif val == x_num:
-#             x_index.append(key)
-#             x_val = x_num
-#             y_val = y_list[key]
-#             break
-#     if x_index == []:
-#         print('Input value not found in the dataset. Make sure that the differentiating point is within the bounds of the x_values')
-
-
-
-
-
-#     if val in x_list:
-#         return
-#     st_sz = abs(x_list[0] - x_list[1])
-#     out_list = []
-#     n_size = len(y_list)
-#     for i_x, value in enumerate(y_list):
-#         if i_x == 0:
-#             f_deriv = value
-#             # # First data point uses Forward Finite Divided Difference
-#             # p_2 = y_list[i_x+2]
-#             # p_1 = y_list[i_x+1]
-#             # f_deriv = (-p_2 + 4*p_1 - 3*value)/(2*st_sz)
-
-#         if i_x == 1 or i_x == n_size-2:
-#             # The end points do not have as much data so the derivative loses accuracy, fewer series terms available
-#             p_1 = y_list[i_x+1]
-#             m_1 = y_list[i_x-1]
-#             f_deriv = ((p_1) - (m_1))/(2*st_sz)
-
-#         elif i_x > 1 and i_x < n_size-2:
-#             # Centered method while the data exists
-#             p_2 = y_list[i_x+2]
-#             p_1 = y_list[i_x+1]
-#             m_1 = y_list[i_x-1]
-#             m_2 = y_list[i_x-2]
-#             f_deriv = (-p_2 + 8*p_1 - 8*m_1 + m_2)/(12*st_sz)
-
-#         elif i_x == n_size -1:
-#             # # Last data point uses Backward Finite Divided Difference
-#             # m_2 = y_list[i_x-2]
-#             # m_1 = y_list[i_x-1]
-#             # f_deriv = (m_2 - 4*m_1 + 3*value)/(2*st_sz)
-#             f_deriv = value
-
-
-#         out_list.append(f_deriv)
-#     return out_list
 def num_1deriv(x_list, y_list):
     '''
     Numerical Methods - Numeric Differentiation of a list of data points
@@ -138,6 +73,9 @@ def num_2deriv(x_list, y_list):
     Numerical Methods - Numeric Differentiation of a list of data points
     returns second derivative
     Forward Finite Divided difference at the start, Backward at the end, and centered in the middle
+    Empirically, the error seems the worst at the second point and the second to last point with the
+    more error prone centered divided difference formulas. potential future work may be to
+    improve the error by using a more accurate forward or backward finite difference formula
     '''
     st_sz = abs(x_list[0] - x_list[1])
     n_size = len(y_list)
@@ -146,7 +84,10 @@ def num_2deriv(x_list, y_list):
         exit()
     elif n_size < 2:
         print('Numerical Differentiation Error (num_2deriv)\nData must be at least 2 values long.\n')
+    # Preallocating the output list saves time in most languages, but doesn't really matter in python
     out_list = [None] * n_size
+    # Runs through each case for the data points and returns the numerically derived derivative at the
+    # given point for the whole list of data.
     for i_x in range(n_size):
         if i_x == 0:
             # First data point uses Forward Finite Divided Difference
@@ -174,6 +115,7 @@ def num_2deriv(x_list, y_list):
             m_2 = y_list[i_x-2]
             m_1 = y_list[i_x-1]
             f_deriv = (2*y_list[i_x] - 5*m_1 + 4*m_2 - m_3)/(st_sz**2)
+        # Saves each point in its appropriate spot in the output list
         out_list[i_x] = f_deriv
     return out_list
 
