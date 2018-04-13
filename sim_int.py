@@ -62,49 +62,65 @@ def sim_int_num(x_list, y_list):
     Numerical Methods : Integration
     Numerically integrates an xy list using an optimized simpson algorithm
     '''
-    hgt = abs(x_list[0]-x_list[1])
-    n_sz = len(x_list)
-    odd = abs(n_sz/2 - int(n_sz/2))
-    m_cnt = n_sz
-    st_int = 0
+    # Trapezoidal rule for 2 points
     trap = lambda h, f_0, f_1 : h * (f_0 - f_1) / 2
-    def simp13(h, f_0, f_1, f_2):
-        return 2*h*(f_0 + 4*f_1 + f_2)/6
+    # Simpsons 1/3 rule for 3 points
+    simp_13 = lambda h, f_0, f_1, f_2 : 2*h*(f_0 + 4*f_1 + f_2)/6
+    # Simpsons 3/8 rule for 4 points
+    simp_38 = lambda h, f_0, f_1, f_2, f_3 : (3*h * (f_0 + 3* (f_1 + f_2) + f_3) / 8)
+    st_sz = abs(x_list[0] - x_list[1])
+    n_size = len(y_list)
+    m_size = n_size
+    if n_size != len(x_list):
+        print('Numerical Integration Error (sim_int_num)\nSize of x-list and y-list must be the same\n')
+        exit()
+    elif n_size < 2:
+        print('Numerical Differentiation Error (sim_int_num)\nData must be at least 2 values long.\n')
+    out_list = []
+    if n_size == 2:
+        out_list.append(trap(st_sz, y_list[0], y_list[1]))
+    elif (n_size % 2) == 0:
+        f_0 = y_list[n_size-4]
+        f_1 = y_list[n_size-3]
+        f_2 = y_list[n_size-2]
+        f_3 = y_list[n_size-1]
+        out_list.append(simp_38(st_sz, f_0, f_1, f_2, f_3))
+        m_size -= 3
+    if m_size > 1:
+        for i_x in range(0, m_size-1, 2):
+            f_0 = y_list[i_x]
+            f_1 = y_list[i_x + 1]
+            f_2 = y_list[i_x + 2]
+            out_list.append(simp_13(st_sz, f_0, f_1, f_2))
+    return sum(out_list)
 
-    def simp_38(h, f_0, f_1, f_2, f_3):
-        '''
-        Simpson's 3/8ths rule: Approximates a 3rd order Lagrange
-        polynomial fit to four points.
-        '''
-        return (3*h * (f_0 + 3* (f_1 + f_2) + f_3) / 8)
 
-
-    def n_simp_13m(in_list, h, n=0):
-        '''
-        Simpson's 1/3rd rule: Multiple Application: Feed a function,
-        height and number of points. Needs odd number of points
-        '''
-        if n == 0:
-            n = len(in_list)
-        simp13_sum = in_list[0]
-        for i in range(1, n-2, 2):
-            simp13_sum += (4 * in_list[i-1]) + (2 * in_list[i])
-        simp13_sum += (4 * in_list[n-2]) + (in_list[n-1])
-        return (h * simp13_sum / 3)
-    if n_sz < 2:
-        print('Insufficient points passed to Numeric Integrator for Datasets : sim_int_num\n 2 data points minimum required.')
-    if n_sz == 2:
-        st_int = trap(hgt, y_list[0], y_list[1])
-    if odd > 0 and n_sz > 3:
-        st_int += (simp_38(hgt,y_list[-4], y_list[-3], y_list[-2], y_list[-1]))
-        m_cnt = n_sz - 3
-    if m_cnt > 1:
-        st_int += n_simp_13m(y_list, hgt, m_cnt)
-    # for i in range(1,m_cnt-1,2):
-    #     # st_int += simp13(hgt, y_list[i], y_list[i+1], y_list[i+2])
+    # def n_simp_13m(in_list, h, n=0):
+    #     '''
+    #     Simpson's 1/3rd rule: Multiple Application: Feed a function,
+    #     height and number of points. Needs odd number of points
+    #     '''
+    #     if n == 0:
+    #         n = len(in_list)
+    #     simp13_sum = in_list[0]
+    #     for i in range(1, n-2, 2):
+    #         simp13_sum += (4 * in_list[i-1]) + (2 * in_list[i])
+    #     simp13_sum += (4 * in_list[n-2]) + (in_list[n-1])
+    #     return (h * simp13_sum / 3)
+    # if n_sz < 2:
+    #     print('Insufficient points passed to Numeric Integrator for Datasets : sim_int_num\n 2 data points minimum required.')
+    # if n_sz == 2:
+    #     st_int = trap(hgt, y_list[0], y_list[1])
+    # if odd > 0 and n_sz > 3:
+    #     st_int += (simp_38(hgt,y_list[-4], y_list[-3], y_list[-2], y_list[-1]))
+    #     m_cnt = n_sz - 3
+    # if m_cnt > 1:
     #     st_int += n_simp_13m(y_list, hgt, m_cnt)
-    # # print(st_int)
-    return st_int
+    # # for i in range(1,m_cnt-1,2):
+    # #     # st_int += simp13(hgt, y_list[i], y_list[i+1], y_list[i+2])
+    # #     st_int += n_simp_13m(y_list, hgt, m_cnt)
+    # # # print(st_int)
+    # return st_int
 
 
 
