@@ -57,7 +57,7 @@ def num_1deriv(x_list, y_list):
             # The end points do not have as much data so the derivative loses accuracy, fewer series terms available
             p_1 = y_list[i_x + 1]
             m_1 = y_list[i_x - 1]
-            f_deriv = p_1 - m_1 / (2 * st_sz)
+            f_deriv = (p_1 - m_1) / (2 * st_sz)
         elif i_x == (n_size - 1):
             # Last data point uses Backward Finite Divided Difference
             m_1 = y_list[i_x-1]
