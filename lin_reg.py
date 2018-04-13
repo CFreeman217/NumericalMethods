@@ -41,6 +41,22 @@ def lin_reg(x_list, y_list):
     print('Maximum Error = {:.4f}\n'.format(er_max))
     return coef_a, coef_b
 
+def lin_origin(x_list, y_list):
+    '''
+    Fits a line through the origin of the form y = a*x + 0 for instrument calibration
+    applications.
+    '''
+    n_size = len(y_list)
+    numer = 0
+    denom = 0
+    if n_size != len(x_list):
+        print('Numerical Differentiation Error (lin_origin)\nSize of x-list and y-list must be the same\n')
+        exit()
+    for x_i in range(n_size):
+        numer += x_list[x_i]*y_list[x_i]
+        denom += x_list[x_i]**2
+    return (numer/denom)
+
 def prob_3():
     deflect = [0.00, 1.25, 2.50, 3.75, 5.00]
     v_out = [0.10, 0.65, 1.32, 1.95, 2.70]
