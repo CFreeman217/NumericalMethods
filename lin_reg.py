@@ -47,6 +47,7 @@ def lin_origin(x_list, y_list):
     applications.
     '''
     n_size = len(y_list)
+    y_mean = sum(y_list)/n_size
     numer = 0
     denom = 0
     if n_size != len(x_list):
@@ -55,7 +56,13 @@ def lin_origin(x_list, y_list):
     for x_i in range(n_size):
         numer += x_list[x_i]*y_list[x_i]
         denom += x_list[x_i]**2
-    return (numer/denom)
+    coef_a = (numer/denom)
+    s_sq_t = sum([((coef_a * x_list[i] - y_list[i])**2) for i in range(n_size)])
+    s_sq_r = sum([(y_list[i] - y_mean)**2 for i in range(n_size)])
+    r_sq = 1 - (s_sq_t / s_sq_r)
+
+    return coef_a, r_sq
+
 
 def prob_3():
     deflect = [0.00, 1.25, 2.50, 3.75, 5.00]
