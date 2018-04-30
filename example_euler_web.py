@@ -1,4 +1,4 @@
-## module web_euler_ex
+## module example_euler_web
 ''' Online test case for example running eulers method on a dataset for numeric integration estimation'''
 import numpy as np
 import matplotlib.pyplot as plt
