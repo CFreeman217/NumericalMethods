@@ -1,24 +1,29 @@
-''' https://github.com/CFreeman217/NumericalMethods.git '''
+## module false_position
+'''
+false_position(funct, lowerguess, upperguess, er_limit=0, max_iter=10)
+    Numerical Methods - Roots of functions
 
-def main():
-    '''
-    Problem 5-17 : Estimating volume of spherical tank
-    '''
-    from math import pi
-    R = 3 # meters - Radius of tank
-    V = 30 # m^3 - Volume to estimate
-    m_it = 3 # Iteration limit
-    # Volume of sphere minus estimation volume (find zero for this function)
-    f = lambda h : pi * h ** 2 * (3*R - h)/3 - V
-    h_low = 0 # Lower guess
-    h_high = R # Upper guess
+    False Position Method:
 
-    false_position(f, h_low, h_high, 0, m_it)
+    Takes a function with lower and upper bounds to find the root
+    after an iteration limit with error approximation using false
+    position.
 
-def false_position(funct, lowerguess, upperguess, er_limit=0, max_iter=10):
+    funct : Function to evaluate the root
+    lowerguess : Initial lower guess for x
+    upperguess : Initial upper guess for x
+    max_iter : Maximum number of iterations allowed
+
+    see prob5_17.py
+
+https://github.com/CFreeman217/NumericalMethods.git
+'''
+
+
+def false_position(funct, lowerguess, upperguess, er_limit=0.00001, max_iter=10):
     '''
     Numerical Methods - Roots of functions
-    
+
     False Position Method:
 
     Takes a function with lower and upper bounds to find the root
@@ -72,4 +77,4 @@ def false_position(funct, lowerguess, upperguess, er_limit=0, max_iter=10):
     print('Iteration Count : {}'.format(iter_no + 1))
     # Returns the coordinates of the most recent guess
     return x_guess, y_guess
-main()
+

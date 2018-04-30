@@ -26,3 +26,5 @@ def printSoln(X, Y, freq):
     for i in range(0,m,freq):
         printLine(X[i],Y[i],n)
     if i != m - 1: printLine(X[m - 1],Y[m - 1],n)
+
+    input('Press Enter to Continue ... ')

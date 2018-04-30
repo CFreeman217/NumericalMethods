@@ -1,5 +1,21 @@
-import numpy as np
+## module div_diff_deriv
+'''
+Numerical Methods - Differentiation
 
+Centered finite divided difference, 1st derivative:
+cfdd_1deriv(fcn, val, step)
+- Use when the function is known
+
+Centered finite divided difference, 1st derivative for dataset:
+num_1deriv(x_list, y_list)
+- Use when calculating from a list of data points
+
+Centered finite divided difference, 2nd derivative for dataset:
+- num_2deriv(x_list, y_list)
+
+see example4_4.py
+'''
+import numpy as np
 
 def cfdd_1deriv(fcn, val, step):
     '''
@@ -125,16 +141,3 @@ def num_2deriv(x_list, y_list):
 
 
 
-def ex4_4():
-    '''
-    Test case for cfdd_1deriv
-    '''
-    func = lambda x : -0.1*x**4 - 0.15*x**3 - 0.5*x**2 - 0.25*x + 1.25
-    val = 0.5
-    hgt = 0.5
-    x_list = [(i*0.5 - 0.5) for i in range(5)]
-    y_list = [func(i) for i in x_list]
-    print(cfdd_1deriv(func, val, hgt))
-    print(num_1deriv(x_list, y_list))
-
-ex4_4()

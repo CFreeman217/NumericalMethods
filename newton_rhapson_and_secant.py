@@ -1,18 +1,10 @@
-def main():
-    '''
-    Associated with Problem 6.9 b & c
-    '''
+## module newton_rhapson_and_secant
+'''
+Numerical Methods - Roots of functions : Open methods
 
-    # Initial functions to find the root
-    funct = lambda x : x**3 - 6*x**2 + 11*x - 6.1
-    # Derivative of the first function for Newton-Rhapson
-    funct_p = lambda x : 3*x**2 - 12*x + 11
-    x_init = 3.5 # Initial guess
-    x_i = 2.5 # Initial first guess for the i term in secant method
-    er_lim = 0.005 # Error limit of less than 0.5%
-    max_i = 3 # Max iterations
-    newton_raphson(funct, funct_p, x_init, er_lim, max_i)
-    nm_secant(funct, x_init, x_i, er_lim, max_i)
+see prob6_9bc.py
+
+'''
 
 
 def newton_raphson(funct, fderiv, initial_guess, er_limit=0, max_iter=10):
@@ -26,14 +18,14 @@ def newton_raphson(funct, fderiv, initial_guess, er_limit=0, max_iter=10):
     Newton-Raphson is one of the more widely used algorithms.
 
     These methods converge at least twice as fast as bracketing methods
-    
+
 
     funct : The function you are finding the root for
     fderiv : The first derivative of funct
     initial_guess : Starting point for calculation
     er_limit : Estimated Error Threshold (Optional)
     max_iter : Maximum iterations (Optonal, default is 10)
-    
+
     '''
     x_guess = initial_guess
     for iter_no in range(max_iter):
@@ -60,14 +52,14 @@ def nm_secant(funct, xi_1 , xi, er_limit=0, max_iter=100):
 
     These open methods do not require both of the initial guesses to straddle
     the root, but sometimes these methods do not converge.
-    
+
 
     funct : The function you are finding the root for
     xi_1 : The i+1 term of the x starting values
     xi : The i-th term of starting values
     er_limit : Estimated Error Threshold (Optional)
     max_iter : Maximum iterations (Optional, default is 10)
-    
+
     '''
     # Gather information on the function at the starting points
     x_plus1 = xi_1
@@ -95,4 +87,4 @@ def nm_secant(funct, xi_1 , xi, er_limit=0, max_iter=100):
     print('Estimated Error : {}'.format(c_error))
     print('Iteration Count : {}'.format(iter_no + 1))
 
-main()
+

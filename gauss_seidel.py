@@ -1,24 +1,31 @@
-def example11_3():
-    '''
-    Use the Gauss-Seidel method to obtain the solution of the system
-    3.0 * x_1 - 0.1 * x_2 - 0.2 * x_3 = 7.85
-    0.1 * x_1 + 7.0 * x_2 - 0.3 * x_3 = -19.3
-    0.3 * x_1 - 0.2 * x_2 +  10 * x_3 = 71.4
+## module gauss-seidel
+'''
+gauss_seidel(coef_A,vec_B,guess_x=None, i_max=100, er_lim=.0001, rel_lam=1)
+Numerical Methods - Gauss-Seidel Method
 
-    x_1 = 3
-    x_2 = -2.5
-    x_3 = 7
+Most commonly used iterative method
+Fast convergence (when this works) helps to control round-off error
+Relaxation uses a value to attenuate the movement - speeds up convergence
 
-    '''
-    mat_A = [[3.0,-0.1,-0.2],
-             [0.1, 7.0,-0.3],
-             [0.3,-0.2, 10]]
-    vec_b = [ 7.85,
-             -19.3,
-              71.4]
+Problems:
+    1.) Can be nonconvergent
+    2.) Can converge slowly
+Benefits:
+    1.) Less computationally heavy
+    2.) Fastest method
+    3.) Convergence guaranteed for diagonally dominant matrices
 
-    ans = gauss_seidel(mat_A, vec_b)
-    print(ans)
+coef_A : Input coefficient matrix
+vec_B : Known value vector
+guess_x : Initial guesses for x (optional, default is zeros)
+i_max : Maximum iterations (optional, default is 100)
+er_lim : Estimated error threshold (optional, default is 0.001)
+rel_lam : Initial relaxation coefficient lambda (optional, default is 1)
+
+Returns a list of values for the solution
+
+See example11_3.py
+'''
 
 def gauss_seidel(coef_A,vec_B,guess_x=None, i_max=100, er_lim=.0001, rel_lam=1):
     '''
@@ -107,4 +114,4 @@ def gauss_seidel(coef_A,vec_B,guess_x=None, i_max=100, er_lim=.0001, rel_lam=1):
             break
     return guess_x
 
-example11_3()
+

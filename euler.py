@@ -1,32 +1,23 @@
+## module euler
+'''
+Numerical Methods - Numeric Integration of ODE Initial Value Problems
+def euler(func, x_0, x_f, y_0, n)
+    Euler Method:
+
+    Inputs:
+    func : function with variables in the form of f(x,y)
+    x_0, x_f : beginning and end points to evaluate the integral
+    y_0 : Initial value for the dependent variable(s). Feed a 2-D numpy array to solve multiple equations.
+    n : Number of intervals to use between x_0, x_f
+
+    Outputs:
+    x : List of independent variable values
+    y : List of dependent variable values for each equation
+
+    see web_euler_ex.py
+        prob25_1.py
+'''
 import numpy as np
-import matplotlib.pyplot as plt
-from numpy import ndarray
-
-def prob25_1():
-    in_fun = lambda t, y : y*(t**2) - 1.1*y
-    x1_0 = 0
-    x1_f = 2
-    y1_0 = 1
-    n1_s = 4
-    n2_s = 8
-    X1, Y1 = euler(in_fun, x1_0, x1_f, y1_0, n1_s)
-    X2, Y2 = euler(in_fun, x1_0, x1_f, y1_0, n2_s)
-    plt.plot(X1, Y1, label='Euler h=0.5')
-    plt.plot(X2, Y2, label='Euler h=0.25')
-    plt.show()
-
-def online():
-    x0 = 0
-    y0 = 1
-    xf = 10
-    n = 100
-    in_fun = lambda x,y : -y + np.sin(x)
-    X, Y = euler(in_fun, x0, xf, y0, n)
-    plt.plot(X, Y)
-    plt.xlabel('X values')
-    plt.ylabel('Y values')
-    plt.title('Approximate Solution with Forward Euler\'s Method')
-    plt.show()
 
 def euler(func, x_0, x_f, y_0, n):
     '''
@@ -61,10 +52,3 @@ def euler(func, x_0, x_f, y_0, n):
         y[i] = d_x*(func(x[i-1],y[i-1])) + y[i-1]
     # Return x and y vectors
     return x, y
-
-
-
-
-
-prob25_1()
-# online()

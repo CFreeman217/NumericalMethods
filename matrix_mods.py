@@ -1,66 +1,41 @@
-def prob10_9():
-    '''
-    Solve the system of equations using LU Decomposition and back substitution
-    '''
-    mat_A = [[ 3, -2, 1],
-             [ 2,  6,-4],
-             [-1, -2, 5]]
-    vec_B = [-10,
-              44,
-             -26]
-    lowr, upr = lu_decomp(mat_A)
-    print('Lower Matrix : ')
-    for line in lowr:
-        print(line)
-    print('Upper Matrix : ')
-    for line in upr:
-        print(line)
-    res_D = forward_sub(lowr,vec_B)
-    print('Forward Vector : ')
-    for line in res_D:
-        print(line)
-    sol = back_sub(upr,res_D)
-    print('Solution : ')
-    for line in sol:
-        print(line)
+## module matrix_mods
+'''
+Numerical Methods : Systems of Equations Matrix Modifiers
+Solves matrix coefficient system using LU decomposition and back substitution
 
-def example10_3():
-    '''
-    Compute the matrix inverse of the following matrix
-    '''
-    mat_A = [[3.0, -0.1, -0.2],
-             [0.1,  7.0, -0.3],
-             [0.3, -0.2, 10.0]]
-    for line in zip(*mat_inverse(mat_A)):
-        # FANCY FORMAT: {0:1.4E}
-        #               0 is the index of the formatter tag
-        #               : Separates the index number from the formatter
-        #               1 Minimum digits to display before the decimal (space before to pad positives)
-        #               . Decimal divider location
-        #               4 Number of decimals to display
-        #               E Use a capital E for scientific notation (f - float, e - lowercase e)
-        print(['{0: 1.4E} '.format(k) for k in line])
+Inverse matrix:
+mat_inverse(input_matrix)
+    Computes the inverse of a given matrix through LU Decomposition, forward, and back substitution
 
-def prob10_11():
-    '''
-    Use the following decomposition to (a) compute the determinant and (b) solve using vec_B
-    (a) Determinant of A is product of diagonal down U matrix,
-        det_A = (3) * (7.3333) * (3.6364) = 80.0004363
-    (b) See below:
-    '''
-    L = [[ 1.0000, 0.0000, 0],
-         [ 0.6667, 1.0000, 0],
-         [-0.3333,-0.3636, 1]]
-    U = [[ 3,-2.0000, 1.0000],
-         [ 0, 7.3333,-4.6667],
-         [ 0, 0.0000, 3.6364]]
-    vec_B = [-10,
-              44,
-             -26]
-    res_D = forward_sub(L, vec_B)
-    sol = back_sub(U, res_D)
-    for line in sol:
-        print('{0: 1.2f} '.format(line))
+Doolittle pivoting method:
+mat_pivot(in_matrix)
+    Pivots the input matrix to put the largest value on the diagonal. Returns an identity
+    matrix that needs to be multiplied into the original matrix to yield the original
+    transformed matrix
+
+LU Decomposition with or without pivoting:
+lu_decomp(input_matrix, pivot=True)
+    Yields the lower and upper decomposition for the input matrix (must be square)
+    (optional) Cancel the pivoting step, default is to pivot.
+    Returns :
+    lower : Lower triangular matrix
+    upper : Upper triangular matrix
+    This method is slower than the numpy version but this is a breakdown of how it is done.
+
+Forward substitution
+forward_sub(input_matrix, known_values):
+    Performs forward substitution on a given input coefficient matrix and a vector matrix of known values.
+    Returns a results vector matrix that can be sent into the back substitution method.
+
+Backward substitution
+back_sub(input_matrix, known_values):
+    Performs back substitution on a given input matrix with a vector of known values.
+    Returns the results for the coefficients
+
+See prob10_9.py
+    example10_3.py
+    prob10_11.py
+'''
 
 def mat_inverse(input_matrix):
     '''
@@ -224,6 +199,3 @@ def forward_sub(input_matrix, known_values):
         results += [(known_values[calc_row] - total) / input_matrix[calc_row][calc_row]]
     return results
 
-prob10_9()
-# example10_3()
-prob10_11()

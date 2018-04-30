@@ -1,8 +1,14 @@
-def findpeaks(x_list, y_list, dy_list, d2y_list):
+## module findpeaks
+'''Accepts list of x_values and y_values, performs numeric differentiation for first and second derivative. Returns peak values'''
+from div_dif_deriv import num_1deriv, num_2deriv
+
+def findpeaks(x_list, y_list):
     '''
-    Accepts lists of x values and y-values with numerically derived first and second derivatives
-    returns list of indices for detected peaks. Requires filtered data.
+    Accepts lists of x values and y-values from raw input data.
+    Returns list of indices for detected peaks. Requires filtered data.
     '''
+    dy_list = num_1deriv(x_list, y_list)
+    d2y_list = num_2deriv(x_list, y_list)
     peak_points = []
     sign_toggle = 0
     n_pts = len(x_list)

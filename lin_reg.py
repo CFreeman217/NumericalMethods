@@ -1,3 +1,23 @@
+## module lin_reg
+'''
+Numerical Methods: Linear Regression Formulas
+lin_reg(x_list, y_list)
+    Generates linear regression best fit line for list of x-values and y-values passed in the form of a list
+    Returns coefficients for the form y = a * x + b
+    a, b, r_squared, std_er, er_max = lin_fit(x_list, y_list)
+    a : a-coefficient
+    b : intercept offset
+    r_squared : correlation coefficient
+    std_er : standard error
+    er_max : maximum error
+
+lin_origin(x_list, y_list)
+    Fits a line through the origin of the form y = a*x + 0 for instrument calibration
+    applications.
+
+    See example17_1.py
+        prob_3.py
+'''
 def lin_reg(x_list, y_list):
     '''
     Generates linear regression best fit line for list of x-values and y-values passed in the form of a list
@@ -63,23 +83,3 @@ def lin_origin(x_list, y_list):
 
     return coef_a, r_sq
 
-
-def prob_3():
-    deflect = [0.00, 1.25, 2.50, 3.75, 5.00]
-    v_out = [0.10, 0.65, 1.32, 1.95, 2.70]
-    m, b = lin_reg(deflect, v_out)
-
-
-def ex17_1():
-    y_i = [0.5,\
-           2.5,\
-           2.0,\
-           4.0,\
-           3.5,\
-           6.0,\
-           5.5]
-    m, b = lin_reg([i for i in range(1,(len(y_i)+1))], y_i)
-
-
-ex17_1()
-prob_3()

@@ -1,27 +1,17 @@
-''' https://github.com/CFreeman217/NumericalMethods.git '''
+## module bisection
+'''
+bisection(function, lower_guess, upper_guess, error_limit, max_iterations)
+Uses bisection to find the root of the function. Inputs must straddle a root.
+ - Example : prob5_16b.py
+https://github.com/CFreeman217/NumericalMethods.git
+'''
 
-def main():
-    '''
-    Problem 5-16b : Critical Depth of Trapezoidal Channel
-    '''
-    Q = 20 # m^3/s - Flow Rate
-    g = 9.81 # m/s^2 - Gravity
-    # Function to iterate over
-    f = lambda y : 1 - (Q**2 / (g * (3*y + y**2/2)**3))*(3 + y)
-    low = 0.5 # Lower Guess
-    high = 2.5 # Upper Guess
-    er = 0.01 # Boundary Limit
-    m_it = 10 # Maximum Iterations
-    # Call the bisection subroutine
-    bisection(f, low, high, er, m_it)
-
-
-def bisection(funct, lowerguess, upperguess, er_limit=0, max_iter=10):
+def bisection(funct, lowerguess, upperguess, er_limit=0.000001, max_iter=10):
     '''
     Numerical Methods - Roots of Functions
-    
+
     Bisection Method:
-    
+
     + As a bracketing method, this will always converge
     - Requires 2 initial conditions that bracket the root
     - Can be slow to converge
@@ -78,4 +68,3 @@ def bisection(funct, lowerguess, upperguess, er_limit=0, max_iter=10):
     # Returns the coordinates of the most recent guess
     return x_guess, y_guess
 
-main()

@@ -1,36 +1,25 @@
+## module muller_method
+'''
+Numerical Methods - Muller Method
 
-def example7_2():
-    f_x = lambda x : x**3 - 13*x -12 # Function to evlauate
-    x_0 = 4.5 # Guess 1
-    x_1 = 5.5 # Guess 2
-    x_2 = 5 # Guess3
-    muller_method(f_x, x_0, x_1, x_2)
+This method takes three guesses around a local root and draws a parabola through
+the three points. Then, using the quadratic formula, roots are found. This method
+can be used to find complex roots. This method is slightly slower than the
+Newton-Raphson method. The three function outputs cannot be colinear or else a
+parabola cannot be fit to the points.
 
-def prob7_3a():
-    f_x = lambda x : x**3 + x**2 - 4*x -4 # Function to evaluate
-    x_0 = -3 # Guess 1
-    x_1 = -2.5 # Guess 2
-    x_2 = -1.5 # Guess 3
-    muller_method(f_x, x_0, x_1, x_2)
+funct : The function we are trying to find the root for
+guess1 : First guess for initializing a lower bound on drawing a parabola
+guess2 : Second guess should be between guesses 1 and 3
+guess3 : Third guess to initiate the algorithm
+er_limit : Estimated error threshold (optional, default is 0.0001)
+max_iter : Maximum number of iterations (optional, default is 10)
 
-def prob7_3b():
-    f_x = lambda x : x**3 - 0.5*x**2 + 4*x - 2 # Function to evaluate
-    x_0 = -1 # Guess 1
-    x_1 = 1 # Guess 2
-    x_2 = 2 # Guess 3
-    muller_method(f_x, x_0, x_1, x_2)
-
-def prob7_11():
-    from math import e
-    g = 9.81 # m/s^2 Gravity
-    c = 15 # kg/s Drag Coefficient
-    v = 35 # m/s Velocity
-    t = 8 # s Time
-    f_x = lambda m : (g*m/c)*(1-e**(-c*t/m))-v # Function to evaluate
-    x_0 = 1 # Guess 1
-    x_1 = 50 # Guess 2
-    x_2 = 100 # Guess 3
-    muller_method(f_x, x_0, x_1, x_2)
+See example7_2.py
+    prob7_3a.py
+    prob7_3b.py
+    prob7_11.py
+'''
 
 def muller_method(funct, guess1, guess2, guess3, er_limit=0.00001, max_iter=10):
     '''
@@ -40,7 +29,7 @@ def muller_method(funct, guess1, guess2, guess3, er_limit=0.00001, max_iter=10):
     the three points. Then, using the quadratic formula, roots are found. This method
     can be used to find complex roots. This method is slightly slower than the
     Newton-Raphson method. The three function outputs cannot be colinear or else a
-    parabola cannot be fit to the points. 
+    parabola cannot be fit to the points.
 
     funct : The function we are trying to find the root for
     guess1 : First guess for initializing a lower bound on drawing a parabola
@@ -103,7 +92,3 @@ def muller_method(funct, guess1, guess2, guess3, er_limit=0.00001, max_iter=10):
     print('Iteration Count : {}'.format(iter_no + 1))
     print('SciPy fsolve output : {}'.format(fsolve(funct, x_guess1)))
 
-example7_2()
-prob7_3a() 
-prob7_3b() 
-prob7_11()

@@ -1,15 +1,17 @@
+## module gauss_elimination
+'''
+Numerical Methods - linear systems of equations
 
+Gauss Elimination
+    Solves a system of equations using matrix of coefficients and array of
+    known_index values. This is a two step process:
+    1. ) Forward elimination yields an upper triangular matrix
+    2. ) Back substitution solves the equations and assembles the solution
+            matrix
 
-def example():
-    c_matrix = [[1,2,-1],\
-                [5,2,2],\
-                [-3,5,-1]]
-    e_elem = [2,9,1]
-    naive_gauss_pivot(c_matrix, e_elem)
-
-
-
-
+    input_coef_matrix : Array of coefficients for the equations we are trying to solve
+    known_array : Array of constants
+'''
 def naive_gauss_pivot(input_coeff_mat,known_array):
     '''
     Numerical Methods : Gauss Elimination
@@ -21,7 +23,7 @@ def naive_gauss_pivot(input_coeff_mat,known_array):
             matrix
 
     input_coef_matrix : Array of coefficients for the equations we are trying to solve
-    kown_array : Array of constants
+    known_array : Array of constants
     '''
     # Get the dimensions of the coefficient matrix to make sure it is square
     m_rows = len(input_coeff_mat)
@@ -77,4 +79,3 @@ def naive_gauss_pivot(input_coeff_mat,known_array):
     return results
 
 
-example()
