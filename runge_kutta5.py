@@ -1,0 +1,165 @@
+
+import numpy as np
+
+def runge_kutta5(func, x_0, x_f, y_0, st_sz, tol=1.0e-6):
+    '''
+    Numerical Methods: Differential Equations, Initial Value Problems
+
+    5th-order Adaptive Runge-Kutta Method
+    Includes adaptive step size adjustment
+
+    ** Requires numpy to return the np.array datatype and to handle the input vector in both func and y_0 **
+
+    Input:
+    func : Function to evaluate in the form F(x,y)
+    x_0 : Initial value for x to start evaluating the integral
+    x_f : Final value for x
+    y_0 : Initial value for y when x = x_0
+    st_sz : Step size to run across the integral
+    tol : Error estimate threshold for determining whether to adjust step size
+
+    Output
+    X : x-vector
+    Y : y-vector
+    '''
+    # Dormand-Prince coefficients for RK algorithm
+    a1 = 0.2; a2 = 0.3; a3 = 0.8; a4 = 8/9; a5 = 1.0; a6 = 1.0
+    c0 = 35/384; c2 = 500/1113; c3 = 125/192; c4 = -2187/6784; c5=11/84
+    d0 = 5179/57600; d2 = 7571/16695; d3 = 393/640; d4 = -92097/339200; d5 = 187/2100; d6 = 1/40
+    b10 = 0.2
+    b20 = 0.075; b21 = 0.225
+    b30 = 44/45; b31 = -56/15; b32 = 32/9
+    b40 = 19372/6561; b41 = -25360/2187; b42 = 64448/6561; b43 = -212/729
+    b50 = 9017/3168; b51 = -355/33; b52 = 46732/5247; b53 = 49/176; b54 = -5103/18656
+    b60 = 35/384; b62 = 500/1113; b63 = 125/192; b64 = -2187/6784; b65 = 11/84
+    # Store initial values
+    x_n = x_0
+    y_n = y_0
+    # Initialize variables
+    X = []
+    Y = []
+    # Add the first set of known conditions
+    X.append(x_n)
+    Y.append(y_n)
+    # Set up to break the for loop at the end
+    stopper = 0 # Integration stopper, 0 = off, 1 = on
+    # Initialize a k0 to start with the step size
+    k0 = st_sz * func(x_n, y_n)
+    # Generate the RK coefficients
+    for _ in range(500):
+        k1 = st_sz * func(x_n + a1*st_sz, y_n + b10*k0)
+        k2 = st_sz * func(x_n + a2*st_sz, y_n + b20*k0 + b21*k1)
+        k3 = st_sz * func(x_n + a3*st_sz, y_n + b30*k0 + b31*k1 + b32*k2)
+        k4 = st_sz * func(x_n + a4*st_sz, y_n + b40*k0 + b41*k1 + b42*k2 + b43*k3)
+        k5 = st_sz * func(x_n + a5*st_sz, y_n + b50*k0 + b51*k1 + b52*k2 + b53*k3 + b54*k4)
+        k6 = st_sz * func(x_n + a6*st_sz, y_n + b60*k0 + b62*k2 + b63*k3 + b64*k4 + b65*k5)
+        # Getting to the slope is the whole point of this mess
+        dy = c0*k0 + c2*k2 + c3*k3 + c4*k4 + c5*k5
+        # Determine the estimated change in slope by comparing the output coefficients for each RK coefficient
+        E = (c0 - d0)*k0 + (c2 - d2)*k2 + (c3 - d3)*k3 + (c4 - d4)*k4 + (c5 - d5)*k5 - d6*k6
+        # Find the estimated error using a sum of squares method
+        e = np.sqrt(np.sum(E**2)/len(y_n))
+        # we don't know if the new value i
+        hNext = 0.9*st_sz*(tol/e)**0.2
+        # If approximated error is within tolerance, accept this integration step and move on
+        if e <= tol:
+            # Store the new result
+            y_n = y_n + dy
+            # Increment the x-value by the new step size
+            x_n = x_n + st_sz
+            # Add the new values into the output vector
+            X.append(x_n)
+            Y.append(y_n)
+            # Check to break the loop when we have reached the desired x-value
+            if stopper == 1: break # Reached end of x-range
+            # Set limits on how much the next step size can increase to avoid missing data points
+            if abs(hNext) > 10.0*abs(st_sz):
+                hNext = 10.0*st_sz
+            # Determine if the algorithm has reached the end of the dataset
+            if (st_sz > 0.0) == ((x_n + hNext) >= x_f):
+                hNext = x_f - x_n
+                # Sets the break condition for the next loop iteration
+                stopper = 1
+            # Setting k0 to k6 * (next step size) / (current step size) forces the algorithm to use the 4th order formula for the next step
+            k0 = k6*hNext/st_sz
+        else:
+            # The error estimate is outside the required threshold to move on, we need to redo the calculation with a smaller step size
+            if abs(hNext) < 0.1*abs(st_sz):
+                # This cuts the step size into 1/10th the original size
+                hNext = 0.1*st_sz
+            # Set up k0 to go through the 5th order RK method on the next iteration because the error was no good.
+            k0 = k0*hNext/st_sz
+        # Set the next iteration step size
+        st_sz = hNext
+    # Returns the arrays for x and y values
+    return np.array(X), np.array(Y)
+
+def printSoln(X, Y, freq):
+    def printHead(n):
+        print("\n        x  ",end=" ")
+        for i in range (n):
+            print("      y[",i,"] ",end=" ")
+        print()
+
+    def printLine(x,y,n):
+        print("{:13.4e}".format(x),end=" ")
+        for i in range (n):
+            print("{:13.4e}".format(y[i]),end=" ")
+        print()
+    m = len(Y)
+    try: n = len(Y[0])
+    except TypeError: n = 1
+    if freq == 0: freq = m
+    printHead(n)
+    for i in range(0,m,freq):
+        printLine(X[i],Y[i],n)
+    if i != m - 1: printLine(X[m - 1],Y[m - 1],n)
+
+def ex7_8():
+
+    '''
+    The aerodynamic drag force acting on a certain object in free fall can be aproximated by:
+
+    F_d = a * v^2 * e^(-b * y)
+
+    Where:
+    v = velocity (m/s)
+    y = elevation (m)
+    a = drag coefficient = 7.45 (kg/m)
+    b = exponent thing = 10.53e-5 (m^-1)
+
+    The differential equation describing the fall is:
+
+    my'' = -mg * F_d
+
+    Where
+    g = 9.80665 m/s^2
+    m = 114 kg
+
+    If the object is released from an elevation of 9 km, determine the elevation and speed after 10 seconds free fall with the adaptive RK method.
+    '''
+    '''
+    1.) Solve for y'' = -g + (a/m) * y'^2 * e^(-by) = -9.80665 + (7.45/114) * y'^2 * e^(-10.53e-5 * y)
+        y(0) = 9000 m , y'(0) = 0
+
+    y' = [y'_0] = [                         y_1                        ]
+         [y'_1]   [ -9.80665 + (7.45/114) * y_1^2 * e^(-10.53e-5 * y_0)]
+
+    y(0) = [ 9000m ]
+           [   0   ]
+    '''
+    def fcn(x,y):
+        fcn = np.zeros(2)
+        fcn[0] = y[1]
+        fcn[1] = -9.80665 + (7.45/114) * y[1]**2 * np.exp(-10.53e-5 * y[0])
+        return fcn
+
+    x0 = 0
+    xf = 10
+    y0 = np.array([9000,0.0])
+    h = 0.5
+    freq = 1
+    X, Y = runge_kutta5(fcn, x0, xf, y0, h, 1.0e-2)
+    printSoln(X, Y, freq)
+
+ex7_8()
