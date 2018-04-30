@@ -14,7 +14,7 @@ def euler(func, x_0, x_f, y_0, n)
     x : List of independent variable values
     y : List of dependent variable values for each equation
 
-    see web_euler_ex.py
+    see example_euler_web.py
         prob25_1.py
 '''
 import numpy as np
