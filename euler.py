@@ -1,23 +1,37 @@
-import numpy as np 
-import matplotlib.pyplot as plt 
+import numpy as np
+import matplotlib.pyplot as plt
 from numpy import ndarray
 
 def prob25_1():
-    in_fun = lambda t, y : y*np.power(t,2) - 1.1*y 
-    step = 0.01
-    time = np.array([i*step for i in range(int(2/step))])
-    x1_0 = np.array([[0]])
-    x1_f = np.array([[2]])
-    y1_0 = np.array([[1]])
+    in_fun = lambda t, y : y*(t**2) - 1.1*y
+    x1_0 = 0
+    x1_f = 2
+    y1_0 = 1
     n1_s = 4
+    n2_s = 8
     X1, Y1 = euler(in_fun, x1_0, x1_f, y1_0, n1_s)
-    plt.plot(X1, Y1)
+    X2, Y2 = euler(in_fun, x1_0, x1_f, y1_0, n2_s)
+    plt.plot(X1, Y1, label='Euler h=0.5')
+    plt.plot(X2, Y2, label='Euler h=0.25')
     plt.show()
 
-def euler(func, x_0, x_f, y_0, N):
+def online():
+    x0 = 0
+    y0 = 1
+    xf = 10
+    n = 100
+    in_fun = lambda x,y : -y + np.sin(x)
+    X, Y = euler(in_fun, x0, xf, y0, n)
+    plt.plot(X, Y)
+    plt.xlabel('X values')
+    plt.ylabel('Y values')
+    plt.title('Approximate Solution with Forward Euler\'s Method')
+    plt.show()
+
+def euler(func, x_0, x_f, y_0, n):
     '''
     Numerical Methods - Differential Equation Initial Value Problems
-    
+
     ** Requires NUMPY import **
     import numpy as np
 
@@ -27,47 +41,30 @@ def euler(func, x_0, x_f, y_0, N):
     func : function with variables in the form of f(x,y)
     x_0, x_f : beginning and end points to evaluate the integral
     y_0 : Initial value for the dependent variable(s). Feed a 2-D numpy array to solve multiple equations.
-    N : Number of intervals to use between x_0, x_f
+    n : Number of intervals to use between x_0, x_f
 
     Outputs:
-    X : List of independent variable values
-    Y : List of dependent variable values for each equation
+    x : List of independent variable values
+    y : List of dependent variable values for each equation
     '''
-    if N < 2:
-        N = 2
-    h = (x_f - x_0) / N
-    X = [None] * (N+1)
-    numcols = y_0.shape[1]
-    Y = [[None]*numcols]*(N+1)
-    
-    x_n = x_0
-    X[0] = x_n
-    y_n = y_0
-    Y = y_n.conj().T
-    print(Y)
-    for i in range(N):
-        k1 = h*func(x_n, y_n)
-        y_n = y_n + k1
-        x_n = x_n + h
-        X[i+1] = x_n
-        Y[i+1][0] = y_n.conj().T
-        
-    return X,Y
+    # Determine the step size
+    d_x = (x_f - x_0) / (n)
+    # Create a vector of x-values
+    x = np.linspace(x_0, x_f, n+1)
+    # Generate a vector to hold y-values
+    y = np.zeros([n+1])
+    # Set the first initial value
+    y[0] = y_0
+    # Iterate through the calculation
+    for i in range(1,n+1):
+        # The next point is found by evaluating the function at this point
+        y[i] = d_x*(func(x[i-1],y[i-1])) + y[i-1]
+    # Return x and y vectors
+    return x, y
 
-def euler2(func, x_0, x_f, y_0, N):
-    if N < 2:
-        N = 2
-    h = (x_f - x_0)/N
-    x_vec = []
-    max_y = len(y_0)
-    y_vec = [[]]
-    x = x_0
-    x_vec.append(x)
-    y = y_0
-    y_vec[0] = y.conj().T
 
-    for i in range(N):
-        k1 = h*feval(func, x)
-def feval(funcName,*args):
-    return eval(funcName)(*args)
+
+
+
 prob25_1()
+# online()
