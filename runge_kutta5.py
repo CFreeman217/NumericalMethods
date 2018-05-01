@@ -4,6 +4,8 @@
 Numerical Methods - Moderately stiff numeric ODE solvers
 
 4th order - 5th order Runge-Kutta algorithm with adaptive step size
+Uses Dormand-Prince coefficient matrix for adjusting weighting on the algorithm
+This solver mimics MATLAB's ODE45 function.
 
 runge_kutta5(func, x_0, x_f, y_0, st_sz, tol=1.0e-6)
 
@@ -48,6 +50,7 @@ def runge_kutta5(func, x_0, x_f, y_0, st_sz=0.000001, tol=1.0e-6):
     Y : y-vector
 
     See prob25_18.py
+        prob25_26.py
     '''
     # Dormand-Prince coefficients for RK algorithm
     a1 = 0.2; a2 = 0.3; a3 = 0.8; a4 = 8/9; a5 = 1.0; a6 = 1.0
