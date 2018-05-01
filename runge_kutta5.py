@@ -48,9 +48,6 @@ def runge_kutta5(func, x_0, x_f, y_0, st_sz=0.000001, tol=1.0e-6):
     Output
     X : x-vector
     Y : y-vector
-
-    See prob25_18.py
-        prob25_26.py
     '''
     # Dormand-Prince coefficients for RK algorithm
     a1 = 0.2; a2 = 0.3; a3 = 0.8; a4 = 8/9; a5 = 1.0; a6 = 1.0
