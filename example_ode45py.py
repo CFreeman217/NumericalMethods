@@ -61,7 +61,7 @@ def example_ode45py():
         return fcn
     # Array for start and ending times
     t = np.array([0, 100])
-    # Array holding the initial values (velocity and displacement) for each of the jumpers
+    # Array holding the initial values (velocity and displacement) for each of the jumpers (everything starts at zero)
     x = np.array([0]*6)
     # Feed ode45py almost exactly like you would in MATLAB
     X, Y = ode45py(fcn, t, x)

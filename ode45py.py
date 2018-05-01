@@ -22,13 +22,13 @@ ode45py(func, x, y, st_sz=0.1, tol=1.0e-6)
 '''
 import numpy as np
 
-def ode45py(func, x, y, st_sz=0.01, tol=1.0e-6):
+def ode45py(func, x, y, st_sz=0.0001, tol=1.0e-5):
     '''
     Numerical Methods: Differential Equations, Initial Value Problems
 
-    4th-order / 5th-order Adaptive Runge-Kutta Method
+    4th-order / 5th-order Runge-Kutta Method
     Includes adaptive step size adjustment
-    Imitates MATLAB ode45 functionality
+    Imitates MATLAB ode45 functionality and output
     '''
     # Dormand-Prince coefficients for RK algorithm
     a1 = 0.2; a2 = 0.3; a3 = 0.8; a4 = 8/9; a5 = 1.0; a6 = 1.0
