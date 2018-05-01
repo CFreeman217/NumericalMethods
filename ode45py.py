@@ -7,7 +7,7 @@ Numerical Methods - Moderately stiff numeric ODE solvers
 Uses Dormand-Prince coefficient matrix for adjusting weighting on the algorithm
 This solver mimics MATLAB's ODE45 function.
 
-ode45py(func, x, y, st_sz=0.1, tol=1.0e-6)
+ode45py(func, x, y, st_sz=1.0e-4, tol=1.0e-5)
 
     Input:
     func : Function to evaluate in the form F(x,y)
