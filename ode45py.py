@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-## module runge_kutta5
+## module ode45py
 '''
 Numerical Methods - Moderately stiff numeric ODE solvers
 
@@ -7,47 +7,28 @@ Numerical Methods - Moderately stiff numeric ODE solvers
 Uses Dormand-Prince coefficient matrix for adjusting weighting on the algorithm
 This solver mimics MATLAB's ODE45 function.
 
-ode45py(func, x_0, x_f, y_0, st_sz, tol=1.0e-6)
+ode45py(func, x, y, st_sz=0.1, tol=1.0e-6)
 
     Input:
     func : Function to evaluate in the form F(x,y)
-    x_0 : Initial value for x to start evaluating the integral
-    x_f : Final value for x
-    y_0 : Initial value for y when x = x_0
-    st_sz : Step size to run across the integral
-    tol : Error estimate threshold for determining whether to adjust step size
+    x : x-vector containing initial and final values to evaluate the integral
+    y : y-vector with functions to evaluate
+    st_sz : Step size to run across the integral for initial estimate
+    tol : Error estimate tolerance for determining whether to adjust step size
 
-    Output
-    X : x-vector
-    Y : y-vector
-
-    see example7_8.py
-        prob25_18.py
-        prob25_26.py
+    Output:
+    X : x-vector as numpy array
+    Y : y-vector as numpy array
 '''
 import numpy as np
 
-
-def runge_kutta5(func, x_0, x_f, y_0, st_sz=0.01, tol=1.0e-6):
+def ode45py(func, x, y, st_sz=0.01, tol=1.0e-6):
     '''
     Numerical Methods: Differential Equations, Initial Value Problems
 
     4th-order / 5th-order Adaptive Runge-Kutta Method
     Includes adaptive step size adjustment
-
-    ** Requires numpy to return the np.array datatype and to handle the input vector in both func and y_0 **
-
-    Input:
-    func : Function to evaluate in the form F(x,y)
-    x_0 : Initial value for x to start evaluating the integral
-    x_f : Final value for x
-    y_0 : Initial value for y when x = x_0
-    st_sz : Step size to run across the integral
-    tol : Error estimate threshold for determining whether to adjust step size
-
-    Output
-    X : x-vector
-    Y : y-vector
+    Imitates MATLAB ode45 functionality
     '''
     # Dormand-Prince coefficients for RK algorithm
     a1 = 0.2; a2 = 0.3; a3 = 0.8; a4 = 8/9; a5 = 1.0; a6 = 1.0
@@ -60,8 +41,9 @@ def runge_kutta5(func, x_0, x_f, y_0, st_sz=0.01, tol=1.0e-6):
     b50 = 9017/3168; b51 = -355/33; b52 = 46732/5247; b53 = 49/176; b54 = -5103/18656
     b60 = 35/384; b62 = 500/1113; b63 = 125/192; b64 = -2187/6784; b65 = 11/84
     # Store initial values
-    x_n = x_0
-    y_n = y_0
+    x_f = x[1]
+    x_n = x[0]
+    y_n = y
     # Initialize variables
     X = []
     Y = []
