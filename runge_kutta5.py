@@ -20,15 +20,17 @@ runge_kutta5(func, x_0, x_f, y_0, st_sz, tol=1.0e-6)
     Y : y-vector
 
     see example7_8.py
+        prob25_18.py
+        prob25_26.py
 '''
 import numpy as np
 
 
-def runge_kutta5(func, x_0, x_f, y_0, st_sz, tol=1.0e-6):
+def runge_kutta5(func, x_0, x_f, y_0, st_sz=0.000001, tol=1.0e-6):
     '''
     Numerical Methods: Differential Equations, Initial Value Problems
 
-    5th-order Adaptive Runge-Kutta Method
+    4th-order / 5th-order Adaptive Runge-Kutta Method
     Includes adaptive step size adjustment
 
     ** Requires numpy to return the np.array datatype and to handle the input vector in both func and y_0 **
@@ -44,6 +46,8 @@ def runge_kutta5(func, x_0, x_f, y_0, st_sz, tol=1.0e-6):
     Output
     X : x-vector
     Y : y-vector
+
+    See prob25_18.py
     '''
     # Dormand-Prince coefficients for RK algorithm
     a1 = 0.2; a2 = 0.3; a3 = 0.8; a4 = 8/9; a5 = 1.0; a6 = 1.0
