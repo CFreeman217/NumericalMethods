@@ -19,10 +19,12 @@ ode45py(func, x, y, st_sz=0.1, tol=1.0e-6)
     Output:
     X : x-vector as numpy array
     Y : y-vector as numpy array
+
+    See example_ode45py.py
 '''
 import numpy as np
 
-def ode45py(func, x, y, st_sz=0.0001, tol=1.0e-5):
+def ode45py(func, x, y, st_sz=1.0e-4, tol=1.0e-5):
     '''
     Numerical Methods: Differential Equations, Initial Value Problems
 
@@ -30,7 +32,10 @@ def ode45py(func, x, y, st_sz=0.0001, tol=1.0e-5):
     Includes adaptive step size adjustment
     Imitates MATLAB ode45 functionality and output
     '''
-    # Dormand-Prince coefficients for RK algorithm
+    # Dormand-Prince coefficients for RK algorithm -
+    # Basically some people much smarter than me found the best numbers to fit in the weights for each
+    # component of the calculation. These numbers determine how a solving algorithm will respond to a given problem.
+    # This is the reason this particular solver yields a similar output to the matlab function of the same name.
     a1 = 0.2; a2 = 0.3; a3 = 0.8; a4 = 8/9; a5 = 1.0; a6 = 1.0
     c0 = 35/384; c2 = 500/1113; c3 = 125/192; c4 = -2187/6784; c5=11/84
     d0 = 5179/57600; d2 = 7571/16695; d3 = 393/640; d4 = -92097/339200; d5 = 187/2100; d6 = 1/40
@@ -102,4 +107,3 @@ def ode45py(func, x, y, st_sz=0.0001, tol=1.0e-5):
         st_sz = hNext
     # Returns the arrays for x and y values
     return np.array(X), np.array(Y)
-
