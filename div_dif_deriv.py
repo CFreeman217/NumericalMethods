@@ -1,4 +1,4 @@
-## module div_diff_deriv
+## module div_dif_deriv
 '''
 Numerical Methods - Differentiation
 
