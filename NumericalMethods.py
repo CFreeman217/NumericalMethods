@@ -1,10 +1,21 @@
 ## module NumericalMethods
 '''
-ME 306 : Computer Aided Engineering (Numerical Methods)
-
 Numerical Methods v1.0
 
-Created 3 May, 2018
+Created 3 May, 2018 by Clay Freeman
+
+email: freeman.clayton@gmail.com
+
+First version - Methods created for the fulfillment of the course:
+ME 306 : Computer Aided Engineering (Numerical Methods)
+         University of Missouri - Kansas City
+         School of Computing and Engineering
+         Spring 2018
+
+Citations :
+
+S. C. Chapra and R. P. Canale, Numerical Methods for Engineers, 7th Edition ed., New York, New York: McGraw-Hill, 2015.
+J. Kiusalaas, Numerical Methods in Engineering with Python 3, New York, New York: Cambridge University Press, 2013.
 
 Roots of Functions :
  - Bisection
@@ -21,7 +32,7 @@ Systems of Equations :
  - LU Decomp
  - Forward substitution
  - Back substitution
- - Thomas algorithm
+ - Thomas algorithm for tridiagonal systems
 
 Optimization :
  - Golden section
@@ -31,6 +42,7 @@ Differentiation :
  - First derivative of function
  - First derivative for data list
  - Second derivative for data list
+ + Findpeaks - Local maxima locator
 
 Integration :
  - Simpsons adaptive trapezoidal method
@@ -40,15 +52,22 @@ ODE Integration :
  - Basic Euler method
  - Midpoint method
  - Adaptive RK 4/5 method
- - RK 4 method
+ - 4th order Runge-Kutta method
 
- + Findpeaks - Local maxima locator
- + Lin_reg - Linear regression least squares best fit line for data
- + Lin_origin - Least squares regression line through origin
- '''
+Curve Fitting :
+ - Lin_reg : Linear regression least squares best fit line for data
+ - Lin_origin : Least squares regression line through origin
+ - Exp_reg
+
+*** NEEDS WORK ***
+LU decomposition worked with the homework set but did not pass when it got added to this module stack.
+    - check differences between matlab code submission for homework and this module.
+Matrix pivoting returns the augmented pivoted matrix, it would be handy if it broke the matrix back into a and b forms.
+Verify that the differentiation formulas are working correctly, it generated an erroneous hit on the findpeaks function last time for heat/mass project first data point of 10 year temp data
+'''
 import numpy as np
 
- def bisection(funct, lowerguess, upperguess, er_limit=0.000001, max_iter=10):
+def bisection(funct, lowerguess, upperguess, er_limit=0.000001, max_iter=10):
     '''
     Numerical Methods - Roots of Functions
 
@@ -385,7 +404,7 @@ def gauss_elim(input_coeff_mat,known_array):
         # Do some fancy maneuvering to append this to the top of the output list, building the solution
         # from the bottom up. Once again, these results need to be offset by the extra column on the right.
         results = [(aug_comb[calc_row][-1] - total) / aug_comb[calc_row][calc_row-1]] + results
-    print('Results : {}'.format(results))
+    # print('Results : {}'.format(results))
     return results
 
 def gauss_seidel(coef_A,vec_B,guess_x=None, i_max=100, er_lim=.0001, rel_lam=1):
@@ -900,6 +919,29 @@ def num_2deriv(x_list, y_list):
         out_list[i_x] = f_deriv
     return out_list
 
+def findpeaks(x_list, y_list):
+    '''
+    Accepts lists of x values and y-values from raw input data.
+    Returns list of indices for detected peaks. Requires filtered data.
+    '''
+    dy_list = num_1deriv(x_list, y_list)
+    d2y_list = num_2deriv(x_list, y_list)
+    peak_points = []
+    sign_toggle = 0
+    n_pts = len(x_list)
+    for x_i in range(n_pts):
+        sign = sign_toggle
+        if dy_list[x_i]*-1 > 0:
+            # negative
+            sign = 0
+        else:
+            sign = 1
+        if sign != sign_toggle:
+            sign_toggle = sign
+            if d2y_list[x_i] < 0:
+                peak_points.append(x_i)
+    return peak_points
+
 def sim_int(fcn, l_bnd, u_bnd, n_point):
     '''
     Numerical Methods - Closed Numerical Integration
@@ -1181,28 +1223,6 @@ def runge_kutta4(func, x_0, x_f, y_0, n=0, st_sz=0):
     x : x-vector
     y : y-vector
     '''
-    def printSoln(X, Y, freq):
-        def printHead(n):
-            print("\n        x  ",end=" ")
-            for i in range (n):
-                print("      y[",i,"] ",end=" ")
-            print()
-
-        def printLine(x,y,n):
-            print("{:13.4e}".format(x),end=" ")
-            for i in range (n):
-                print("{:13.4e}".format(y[i]),end=" ")
-            print()
-        m = len(Y)
-        try: n = len(Y[0])
-        except TypeError: n = 1
-        if freq == 0: freq = m
-        printHead(n)
-        for i in range(0,m,freq):
-            printLine(X[i],Y[i],n)
-        if i != m - 1: printLine(X[m - 1],Y[m - 1],n)
-
-        input('Press Enter to Continue ... ')
     # Workhorse of the method - generates a weighted average for the slope estimate between the two points being evaluated
     def rk4(func, x_i, y_i, st_sz):
         k0 = st_sz*func(x_i, y_i)
@@ -1236,28 +1256,7 @@ def runge_kutta4(func, x_0, x_f, y_0, n=0, st_sz=0):
     # Set the solution in an array for easier numpy dumpy
     return np.array(X), np.array(Y)
 
-def findpeaks(x_list, y_list):
-    '''
-    Accepts lists of x values and y-values from raw input data.
-    Returns list of indices for detected peaks. Requires filtered data.
-    '''
-    dy_list = num_1deriv(x_list, y_list)
-    d2y_list = num_2deriv(x_list, y_list)
-    peak_points = []
-    sign_toggle = 0
-    n_pts = len(x_list)
-    for x_i in range(n_pts):
-        sign = sign_toggle
-        if dy_list[x_i]*-1 > 0:
-            # negative
-            sign = 0
-        else:
-            sign = 1
-        if sign != sign_toggle:
-            sign_toggle = sign
-            if d2y_list[x_i] < 0:
-                peak_points.append(x_i)
-    return peak_points
+
 
 def lin_reg(x_list, y_list):
     '''
@@ -1323,3 +1322,38 @@ def lin_origin(x_list, y_list):
     r_sq = 1 - (s_sq_t / s_sq_r)
 
     return coef_a, r_sq
+
+def xexp_reg(x_data, y_data):
+    '''
+    Numerical Methods : Exponential curve fit
+    Input x and y data points,
+
+    Returns exponential curve fit constants A and b
+    y = Ax * exp(b*x)
+    '''
+    # Get the size of the dataset
+    size = len(x_data)
+    # To get the desired regression equation result, we take the natural log of y_i/x_i
+    ln_y = [np.log(y_data[i]/x_data[i]) for i in range(size)]
+    # X_hat and Z_hat comes from using weighted averages for the data to generate a better fit
+    x_hat_num = sum([(y_data[i]**2)*x_data[i] for i in range(size)])
+    z_hat_num = sum([(y_data[i]**2)*ln_y[i] for i in range(size)])
+    # Sum of y_data square
+    sy_sq = sum([y_data[i]**2 for i in range(size)])
+    # New coefficients for linear fit
+    x_hat = x_hat_num / sy_sq
+    z_hat = z_hat_num / sy_sq
+    # Generate the b-parameter
+    coef_b_num = sum([(y_data[i]**2) * ln_y[i] * (x_data[i] - x_hat) for i in range(size)])
+    coef_b_den = sum([(y_data[i]**2) * x_data[i] * (x_data[i] - x_hat) for i in range(size)])
+    coef_b = coef_b_num / coef_b_den
+    # Find the A coefficient
+    coef_A = np.exp(z_hat - coef_b * x_hat)
+    # Set up the function to calculate residuals and give feedback on how the curve fits the data
+    func = lambda x : x * coef_A * np.exp(coef_b * x)
+    # Sum of the residuals from the calculation
+    s_resi = sum([(y_data[i] - func(x_data[i]))**2 for i in range(size)])
+    # Standard deviaton from the data. Small numbers are good here
+    std_dev = (s_resi / (size - 2))**(0.5)
+    # print('Exponential Curve Fit Standard Deviation : {}'.format(std_dev))
+    return coef_A, coef_b, std_dev

@@ -54,7 +54,7 @@ def naive_gauss_pivot(input_coeff_mat,known_array):
             # print('elim_row = {}  i = {}  factor = {}'.format(elim_row,pivot_row, factor))
             for item in range(n_cols + 1):
                 aug_comb[elim_row][item] -= factor * aug_comb[pivot_row][item]
-    # At this point, both the coefficient matrix and the elim_rownown value array have been transformed
+    # At this point, both the coefficient matrix and the known value array have been transformed
     # into an upper triangular matrix that can be used to solve for the unknown values
     # BACK SUBSTITUTION - Solve the system of equations from bottom to top
     results = []

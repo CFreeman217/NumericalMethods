@@ -82,6 +82,8 @@ def mat_pivot(in_matrix):
     matrix that needs to be multiplied into the original matrix to yield the original
     transformed matrix
     '''
+    print("INPUT MATRIX")
+    print(in_matrix)
     n_row = len(in_matrix)
     # Generates an identity matrix using the result of the boolean test that runs down the
     # column and row for the matrix size.
@@ -104,19 +106,24 @@ def lu_decomp(input_matrix, pivot=True):
     upper : Upper triangular matrix
     This method is slower than the numpy version but this is a breakdown of how it is done.
     '''
+    print(input_matrix)
     # Get the size of the coefficient matrix and make sure it is square
     n_size = len(input_matrix)
     n_cols = len(input_matrix[0])
     if n_size != n_cols:
-        print('Coefficient matrix must be square')
-        exit
+        print('LU Decomposition Error : Coefficient matrix must be square')
+        return
     # Generate zero matrices for lower and upper
     lower = [[0] * n_size for i in range(n_size)]
     upper = [[0] * n_size for i in range(n_size)]
     # Create pivot matrix pivot and multiplied matrix new_mat
     if pivot == True:
-        pivot = mat_pivot(input_matrix)
-        new_mat = mat_mult(pivot,input_matrix)
+        print("PIVOTING")
+        pivot_vals = mat_pivot(input_matrix)
+        print(pivot_vals)
+        new_mat = mat_mult(pivot_vals,input_matrix)
+        print('Pivoted Matrix')
+        print(new_mat)
     else:
         new_mat = input_matrix
     # Perform LU Decomposition on each computation row
