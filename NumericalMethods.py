@@ -1335,6 +1335,7 @@ def xexp_reg(x_data, y_data):
     size = len(x_data)
     # To get the desired regression equation result, we take the natural log of y_i/x_i
     ln_y = [np.log(y_data[i]/x_data[i]) for i in range(size)]
+    
     # X_hat and Z_hat comes from using weighted averages for the data to generate a better fit
     x_hat_num = sum([(y_data[i]**2)*x_data[i] for i in range(size)])
     z_hat_num = sum([(y_data[i]**2)*ln_y[i] for i in range(size)])
@@ -1347,8 +1348,10 @@ def xexp_reg(x_data, y_data):
     coef_b_num = sum([(y_data[i]**2) * ln_y[i] * (x_data[i] - x_hat) for i in range(size)])
     coef_b_den = sum([(y_data[i]**2) * x_data[i] * (x_data[i] - x_hat) for i in range(size)])
     coef_b = coef_b_num / coef_b_den
+    print(coef_b)
     # Find the A coefficient
     coef_A = np.exp(z_hat - coef_b * x_hat)
+    print(coef_A)
     # Set up the function to calculate residuals and give feedback on how the curve fits the data
     func = lambda x : x * coef_A * np.exp(coef_b * x)
     # Sum of the residuals from the calculation
