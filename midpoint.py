@@ -10,9 +10,6 @@ def midp_int(func, x_0, x_f, y_0, n):
     '''
     Numerical Methods - Differential Equation Initial Value Problems
 
-    ** Requires NUMPY import **
-    import numpy as np
-
     Midpoint Method:
 
     Inputs:

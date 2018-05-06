@@ -6,8 +6,8 @@ import matplotlib.animation as animation
 
 G = 9.8  # acceleration due to gravity, in m/s^2
 L1 = 1.0  # length of pendulum 1 in m
-L2 = 1.0  # length of pendulum 2 in m
-M1 = 1.0  # mass of pendulum 1 in kg
+L2 = 2.0  # length of pendulum 2 in m
+M1 = 2.0  # mass of pendulum 1 in kg
 M2 = 1.0  # mass of pendulum 2 in kg
 
 
@@ -35,17 +35,17 @@ def derivs(state, t):
 
 # create a time array from 0..100 sampled at 0.05 second steps
 dt = 0.05
-t = np.arange(0.0, 20, dt)
+t = np.arange(0.0, 100, dt)
 
 # th1 and th2 are the initial angles (degrees)
 # w10 and w20 are the initial angular velocities (degrees per second)
-th1 = 120.0
+th1 = np.pi
 w1 = 0.0
-th2 = -10.0
+th2 = np.pi
 w2 = 0.0
 
 # initial state
-state = np.radians([th1, w1, th2, w2])
+state = np.array([th1, w1, th2, w2])
 
 # integrate your ODE using scipy.integrate.
 y = integrate.odeint(derivs, state, t)
@@ -56,31 +56,33 @@ y1 = -L1*cos(y[:, 0])
 x2 = L2*sin(y[:, 2]) + x1
 y2 = -L2*cos(y[:, 2]) + y1
 
-fig = plt.figure()
-ax = fig.add_subplot(111, autoscale_on=False, xlim=(-2, 2), ylim=(-2, 2))
-ax.grid()
-
-line, = ax.plot([], [], 'o-', lw=2)
-time_template = 'time = %.1fs'
-time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
-
-
-def init():
-    line.set_data([], [])
-    time_text.set_text('')
-    return line, time_text
-
-
-def animate(i):
-    thisx = [0, x1[i], x2[i]]
-    thisy = [0, y1[i], y2[i]]
-
-    line.set_data(thisx, thisy)
-    time_text.set_text(time_template % (i*dt))
-    return line, time_text
-
-ani = animation.FuncAnimation(fig, animate, np.arange(1, len(y)),
-                              interval=25, blit=True, init_func=init)
-
-# ani.save('double_pendulum.mp4', fps=15)
+plt.plot(t,y[:, 0], t,y[:, 2])
 plt.show()
+# fig = plt.figure()
+# ax = fig.add_subplot(111, autoscale_on=False, xlim=(-2, 2), ylim=(-2, 2))
+# ax.grid()
+
+# line, = ax.plot([], [], 'o-', lw=2)
+# time_template = 'time = %.1fs'
+# time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+
+
+# def init():
+#     line.set_data([], [])
+#     time_text.set_text('')
+#     return line, time_text
+
+
+# def animate(i):
+#     thisx = [0, x1[i], x2[i]]
+#     thisy = [0, y1[i], y2[i]]
+
+#     line.set_data(thisx, thisy)
+#     time_text.set_text(time_template % (i*dt))
+#     return line, time_text
+
+# ani = animation.FuncAnimation(fig, animate, np.arange(1, len(y)),
+#                               interval=25, blit=True, init_func=init)
+
+# # ani.save('double_pendulum.mp4', fps=15)
+# plt.show()

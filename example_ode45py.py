@@ -3,7 +3,7 @@ Example of a python imitation of the popular MATLAB ordinary differential equati
 '''
 import numpy as np
 import matplotlib.pyplot as plt
-from ode45py import ode45py
+from NumericalMethods import ode45py
 
 def example_ode45py():
     '''
@@ -64,7 +64,7 @@ def example_ode45py():
     # Array holding the initial values (velocity and displacement) for each of the jumpers (everything starts at zero)
     x = np.array([0]*6)
     # Feed ode45py almost exactly like you would in MATLAB
-    X, Y = ode45py(fcn, t, x)
+    X, Y = ode45py(fcn, t, x, iter_lim=200000)
 
     # Displacement data is stored in the first three columns
     plt.plot(X, Y[:,0], label='m1 = 60kg')

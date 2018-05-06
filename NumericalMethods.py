@@ -6,12 +6,6 @@ Created 3 May, 2018 by Clay Freeman
 
 email: freeman.clayton@gmail.com
 
-First version - Methods created for the fulfillment of the course:
-ME 306 : Computer Aided Engineering (Numerical Methods)
-         University of Missouri - Kansas City
-         School of Computing and Engineering
-         Spring 2018
-
 Citations :
 
 S. C. Chapra and R. P. Canale, Numerical Methods for Engineers, 7th Edition ed., New York, New York: McGraw-Hill, 2015.
@@ -53,6 +47,7 @@ ODE Integration :
  - Midpoint method
  - Adaptive RK 4/5 method
  - 4th order Runge-Kutta method
+ - Richardson extrapolation-midpoint method
 
 Curve Fitting :
  - Lin_reg : Linear regression least squares best fit line for data
@@ -64,8 +59,10 @@ LU decomposition worked with the homework set but did not pass when it got added
     - check differences between matlab code submission for homework and this module.
 Matrix pivoting returns the augmented pivoted matrix, it would be handy if it broke the matrix back into a and b forms.
 Verify that the differentiation formulas are working correctly, it generated an erroneous hit on the findpeaks function last time for heat/mass project first data point of 10 year temp data
+Richardson extrapolation and midpoint method needs comments and testing
 '''
-import numpy as np
+import math as math # Built-in python module
+import numpy as np # http://www.numpy.org Computing library with tools for scientific computing.
 
 def bisection(funct, lowerguess, upperguess, er_limit=0.000001, max_iter=10):
     '''
@@ -966,7 +963,7 @@ def sim_int(fcn, l_bnd, u_bnd, n_point):
         Simpson's 3/8ths rule: Approximates a 3rd order Lagrange
         polynomial fit to four points.
         '''
-        return (3*h * ((f_0 + 3* (f_1 + f_2) + f_3) / 8))
+        return (3*h * ((f_0 + 3 * (f_1 + f_2) + f_3) / 8))
     def simp_13m(fcn, h, n):
         '''
         Simpson's 1/3rd rule: Multiple Application: Feed a function,
@@ -1119,7 +1116,45 @@ def midp_int(func, x_0, x_f, y_0, n):
     # Return x and y vectors
     return X, Y
 
-def ode45py(func, x, y, st_sz=1.0e-4, tol=1.0e-5):
+def richard_mid(func, x_0, x_f, y_0, tol=1e-4):
+    '''
+    Numerical Methods : Differential Equations, Initial Value Problems
+    Solves Ordinary Differential Equations using both midpoint and richardson extrapolation
+    '''
+    def rm_mdpt(func, x_n, x_f, y_n, n_step):
+        h = (x_f - x_n) / n_step
+        y_0 = y_n
+        y_1 = y_0 + h*func(x_n, y_0)
+        for _ in range(n_step - 1):
+            x_n = x_n + h
+            y_2 = y_0 + 2*h*func(x_n, y_1)
+            y_0 = y_1
+            y_1 = y_2
+        return(0.5*(y_1 + y_0 + h*func(x_n,y_2)))
+    def richardson(r,k):
+        for j in range(k-1,0,-1):
+            const = (k/(k-1))**(2*(k-j))
+            r[j] = (const*r[j+1] - r[j])/(const - 1)
+        return
+
+    kMax = 51
+    n = len(y_0)
+    r = np.zeros((kMax, n))
+    n_stp = 2
+    r[1] = rm_mdpt(func, x_0, x_f, y_0, n_stp)
+    r_old = r[1].copy()
+
+    for k in range(2, kMax):
+        n_stp = 2*k
+        r[k] = rm_mdpt(func, x_0, x_f, y_0, n_stp)
+        richardson(r, k)
+        e = math.sqrt(np.sum((r[1] - r_old)**2)/n)
+        if e < tol : return r[1]
+        r_old = r[1].copy()
+    print('midpoint method did not converge')
+
+
+def ode45py(func, x, y, st_sz=1.0e-5, tol=1.0e-6, iter_lim=50000):
     '''
     Numerical Methods: Differential Equations, Initial Value Problems
 
@@ -1128,9 +1163,6 @@ def ode45py(func, x, y, st_sz=1.0e-4, tol=1.0e-5):
     Imitates MATLAB ode45 functionality and output
     '''
     # Dormand-Prince coefficients for RK algorithm -
-    # Basically some people much smarter than me found the best numbers to fit in the weights for each
-    # component of the calculation. These numbers determine how a solving algorithm will respond to a given problem.
-    # This is the reason this particular solver yields a similar output to the matlab function of the same name.
     a1 = 0.2; a2 = 0.3; a3 = 0.8; a4 = 8/9; a5 = 1.0; a6 = 1.0
     c0 = 35/384; c2 = 500/1113; c3 = 125/192; c4 = -2187/6784; c5=11/84
     d0 = 5179/57600; d2 = 7571/16695; d3 = 393/640; d4 = -92097/339200; d5 = 187/2100; d6 = 1/40
@@ -1141,65 +1173,68 @@ def ode45py(func, x, y, st_sz=1.0e-4, tol=1.0e-5):
     b50 = 9017/3168; b51 = -355/33; b52 = 46732/5247; b53 = 49/176; b54 = -5103/18656
     b60 = 35/384; b62 = 500/1113; b63 = 125/192; b64 = -2187/6784; b65 = 11/84
     # Store initial values
-    x_f = x[1]
+    x_f = x[-1]
     x_n = x[0]
-    y_n = y
+    # y_n = y
     # Initialize variables
     X = []
     Y = []
     # Add the first set of known conditions
     X.append(x_n)
-    Y.append(y_n)
+    Y.append(y)
     # Set up to break the for loop at the end
     stopper = 0 # Integration stopper, 0 = off, 1 = on
     # Initialize a k0 to start with the step size
-    k0 = st_sz * func(x_n, y_n)
+    k0 = st_sz * func(x_n, y)
     # Generate the RK coefficients
-    for _ in range(500):
-        k1 = st_sz * func(x_n + a1*st_sz, y_n + b10*k0)
-        k2 = st_sz * func(x_n + a2*st_sz, y_n + b20*k0 + b21*k1)
-        k3 = st_sz * func(x_n + a3*st_sz, y_n + b30*k0 + b31*k1 + b32*k2)
-        k4 = st_sz * func(x_n + a4*st_sz, y_n + b40*k0 + b41*k1 + b42*k2 + b43*k3)
-        k5 = st_sz * func(x_n + a5*st_sz, y_n + b50*k0 + b51*k1 + b52*k2 + b53*k3 + b54*k4)
-        k6 = st_sz * func(x_n + a6*st_sz, y_n + b60*k0 + b62*k2 + b63*k3 + b64*k4 + b65*k5)
+    for i in range(iter_lim):
+        k1 = st_sz * func(x_n + a1*st_sz, y + b10*k0)
+        k2 = st_sz * func(x_n + a2*st_sz, y + b20*k0 + b21*k1)
+        k3 = st_sz * func(x_n + a3*st_sz, y + b30*k0 + b31*k1 + b32*k2)
+        k4 = st_sz * func(x_n + a4*st_sz, y + b40*k0 + b41*k1 + b42*k2 + b43*k3)
+        k5 = st_sz * func(x_n + a5*st_sz, y + b50*k0 + b51*k1 + b52*k2 + b53*k3 + b54*k4)
+        k6 = st_sz * func(x_n + a6*st_sz, y + b60*k0 + b62*k2 + b63*k3 + b64*k4 + b65*k5)
         # Getting to the slope is the whole point of this mess
         dy = c0*k0 + c2*k2 + c3*k3 + c4*k4 + c5*k5
         # Determine the estimated change in slope by comparing the output coefficients for each RK coefficient
         E = (c0 - d0)*k0 + (c2 - d2)*k2 + (c3 - d3)*k3 + (c4 - d4)*k4 + (c5 - d5)*k5 - d6*k6
         # Find the estimated error using a sum of squares method
-        e = np.sqrt(np.sum(E**2)/len(y_n))
+        e = math.sqrt(np.sum(E**2)/len(y))
         # we don't know if the new value i
         hNext = 0.9*st_sz*(tol/e)**0.2
+        pcnt = (i/iter_lim)*100
+        psolv = (x_n/x_f)*100
+        print('Correction limit : {:1.2f}% x-domain solved: {:1.2f}%'.format(pcnt, psolv))
         # If approximated error is within tolerance, accept this integration step and move on
         if e <= tol:
             # Store the new result
-            y_n = y_n + dy
+            i = i-1
+            y = y + dy
             # Increment the x-value by the new step size
             x_n = x_n + st_sz
             # Add the new values into the output vector
             X.append(x_n)
-            Y.append(y_n)
+            Y.append(y)
             # Check to break the loop when we have reached the desired x-value
             if stopper == 1: break # Reached end of x-range
             # Set limits on how much the next step size can increase to avoid missing data points
-            if abs(hNext) > 10.0*abs(st_sz):
-                hNext = 10.0*st_sz
+            if abs(hNext) > 10*abs(st_sz): hNext = 10*st_sz
             # Determine if the algorithm has reached the end of the dataset
             if (st_sz > 0.0) == ((x_n + hNext) >= x_f):
                 hNext = x_f - x_n
                 # Sets the break condition for the next loop iteration
                 stopper = 1
+                print('Success! Reached the end of the data set.')
             # Setting k0 to k6 * (next step size) / (current step size) forces the algorithm to use the 4th order formula for the next step
             k0 = k6*hNext/st_sz
         else:
             # The error estimate is outside the required threshold to move on, we need to redo the calculation with a smaller step size
-            if abs(hNext) < 0.1*abs(st_sz):
-                # This cuts the step size into 1/10th the original size
-                hNext = 0.1*st_sz
+            if abs(hNext) < abs(st_sz)*0.1 : hNext = st_sz*0.1
             # Set up k0 to go through the 5th order RK method on the next iteration because the error was no good.
             k0 = k0*hNext/st_sz
         # Set the next iteration step size
         st_sz = hNext
+
     # Returns the arrays for x and y values
     return np.array(X), np.array(Y)
 
@@ -1334,8 +1369,8 @@ def xexp_reg(x_data, y_data):
     # Get the size of the dataset
     size = len(x_data)
     # To get the desired regression equation result, we take the natural log of y_i/x_i
-    ln_y = [np.log(y_data[i]/x_data[i]) for i in range(size)]
-    
+    ln_y = [math.log(y_data[i]/x_data[i]) for i in range(size)]
+
     # X_hat and Z_hat comes from using weighted averages for the data to generate a better fit
     x_hat_num = sum([(y_data[i]**2)*x_data[i] for i in range(size)])
     z_hat_num = sum([(y_data[i]**2)*ln_y[i] for i in range(size)])
@@ -1348,10 +1383,8 @@ def xexp_reg(x_data, y_data):
     coef_b_num = sum([(y_data[i]**2) * ln_y[i] * (x_data[i] - x_hat) for i in range(size)])
     coef_b_den = sum([(y_data[i]**2) * x_data[i] * (x_data[i] - x_hat) for i in range(size)])
     coef_b = coef_b_num / coef_b_den
-    print(coef_b)
     # Find the A coefficient
     coef_A = np.exp(z_hat - coef_b * x_hat)
-    print(coef_A)
     # Set up the function to calculate residuals and give feedback on how the curve fits the data
     func = lambda x : x * coef_A * np.exp(coef_b * x)
     # Sum of the residuals from the calculation

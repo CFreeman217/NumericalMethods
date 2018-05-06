@@ -2,7 +2,7 @@
 '''
 Test case for matrix multiplication
 '''
-from mat_mult import mat_mult
+from matrix_mods import mat_mult
 a = [[34,1,77],
      [2,14,8],
      [3,17,11]]
