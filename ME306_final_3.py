@@ -13,15 +13,17 @@ def me306_final_3():
     # w1_0 = 0 # Initial value for angular velocity
     # t2_0 = 0.17 # Initial value for theta 2 displacement
     # w2_0 = 0 # Initial value for angular velocity
+    # fig_name = '3a'
     t1_0 = np.pi # Initial value for theta 1 displacement
     w1_0 = 0 # Initial value for angular velocity
     t2_0 = np.pi # Initial value for theta 2 displacement
     w2_0 = 0 # Initial value for angular velocity
-    i_theta = np.array([w1_0, t1_0, w2_0, t2_0])
+    fig_name = '3b'
+    i_theta = np.array([t1_0, w1_0, t2_0, w2_0])
     def double_pend(t, theta):
         # Initialize the return variable
         dydx = np.zeros(4)
-        #
+        # 
         dydx[0] = theta[1]
         dydx[2] = theta[3]
         d_0 = theta[2] - theta[0]
@@ -36,13 +38,8 @@ def me306_final_3():
         return dydx
 
 
-    # i_theta = np.array([0.0, 0.1, 0.0, 0.17])
-    # i_theta = np.array([0, np.pi, 0, np.pi])
+
     d_time = np.array([0,100])
-    if i_theta[1] == np.pi:
-        fig_name = '3b'
-    else:
-        fig_name = '3a'
     X, Y = ode45py(double_pend, d_time, i_theta)
     x0 = np.zeros(len(X))
     y0 = np.zeros(len(X))

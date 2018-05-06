@@ -1154,7 +1154,7 @@ def richard_mid(func, x_0, x_f, y_0, tol=1e-4):
     print('midpoint method did not converge')
 
 
-def ode45py(func, x, y, st_sz=1.0e-5, tol=1.0e-6, iter_lim=50000):
+def ode45py(func, x, y, st_sz=1.0e-4, tol=1.0e-6, iter_lim=50000):
     '''
     Numerical Methods: Differential Equations, Initial Value Problems
 
