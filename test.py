@@ -62,7 +62,7 @@ y2 = -L2*cos(y[:, 2]) + y1
 # plt.plot(t,y[:, 0], t,y[:, 2])
 # plt.show()
 fig = plt.figure()
-ax = fig.add_subplot(111, autoscale_on=False, xlim=(-5, 5), ylim=(-5, 5))
+ax = fig.add_subplot(111, autoscale_on=False, xlim=(-3.5, 3.5), ylim=(-3.5, 3.5))
 ax.grid()
 
 line, = ax.plot([], [], 'o-', lw=2)
@@ -87,5 +87,5 @@ def animate(i):
 ani = animation.FuncAnimation(fig, animate, np.arange(1, len(y)),
                               interval=25, blit=True, init_func=init)
 
-# ani.save('double_pendulum.mp4', fps=15)
+# ani.save('double_pendulum_partA.mp4', fps=15)
 plt.show()
