@@ -1,4 +1,5 @@
 import pandas as pd
+<<<<<<< HEAD
 import quandl
 import math, datetime
 import numpy as np
@@ -77,3 +78,9 @@ plt.legend(loc=4)
 plt.xlabel('Date')
 plt.ylabel('Price')
 plt.show()
+=======
+import Quandl
+
+df = Quandl.get('WIKI/GOOGL')
+print(df.head)
+>>>>>>> ac9985a49526b59bfb453ac445964cd534d8aa64
